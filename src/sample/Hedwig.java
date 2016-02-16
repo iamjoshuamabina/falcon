@@ -134,7 +134,7 @@ public class Hedwig {
     }
 
     public static String gotoAnal(String pk) throws IOException, URISyntaxException {
-        String api = "images/analysis";
+        String api = "Images/analysis";
         Console.log(Logger.INFO, "@Hedwig.gotoAnal <api: " + api + ">");
         Console.log(Logger.INFO, "@Hedwig.gotoAnal <pk: " + pk + ">");
         Console.log(Logger.INFO, "@Hedwig.gotoAnal <getRemoteName: " + getRemoteName() + ">");
@@ -169,7 +169,7 @@ public class Hedwig {
     }
 
     public static String gotoImages(HedwigPacket mHedwigPacket) throws IOException, URISyntaxException {
-        String api = "images/";
+        String api = "Images/";
         Console.log(Logger.INFO, "@Hedwig.gotoImages -> Images index" );
 
         try{
@@ -224,7 +224,7 @@ public class Hedwig {
     }
 
     public static String addAnalysis(ArrayList<HedwigPacket> HedwigPacketList) throws IOException, URISyntaxException {
-        String api = "images/analysis";
+        String api = "Images/analysis";
         Console.log(Logger.INFO, "@Hedwig.addAnalysis -> api <" + api + ">");
 
         Map<String, String> args;
@@ -304,9 +304,9 @@ public class Hedwig {
     }
 
     public static String addImage(String case_id, String image) throws IOException {
-        String api = "images/new";
+        String api = "Images/new";
 
-        // TODO: upload multiple images
+        // TODO: upload multiple Images
 
         try {
             HEDWIG = HttpClients.createDefault();
