@@ -1,69 +1,69 @@
 Label{
-    -fx-font-family:Open Sans;
+    /*-fx-font-family:Open Sans;*/
     -fx-font-size: 13px;
 }
 #key_value{
-    -fx-font-family:Open Sans;
+    /*-fx-font-family:Open Sans;*/
     -fx-font-size:14px;
     -fx-font-weight:Bold;
 }
 
 #value_data{
-  -fx-font-family:Courier New;
+  /*-fx-font-family:Courier New;*/
   -fx-font-size: 13px;  
     
 }
 #value_key_IPTC{
-    -fx-font-family:Open Sans;
+    /*-fx-font-family:Open Sans;*/
     -fx-font-size:14px;
     -fx-font-weight:Bold;
     
 }
 #value_data_IPTC{
-  -fx-font-family:Courier New;
+  /*-fx-font-family:Courier New;*/
   -fx-font-size: 13px;  
     
 }
 #value_key_EXIF{
-    -fx-font-family:Open Sans;
+    /*-fx-font-family:Open Sans;*/
     -fx-font-size:14px;
     -fx-font-weight:Bold;
     
 }
 #value_data_EXIF{
-  -fx-font-family:Courier New;
+  /*-fx-font-family:Courier New;*/
   -fx-font-size: 13px;  
     
 }
 #hashes_key{
     -fx-font-weight:Bold;
     -fx-font-size:14px;
-    -fx-font-family:Open Sans;
+    /*-fx-font-family:Open Sans;*/
 }
 
 #dashboardValue{
     
     -fx-font-size:14px;
-    -fx-font-family:Open Sans;  
+    /*-fx-font-family:Open Sans;  */
 }
 MenuBar{
-    -fx-font-family:Open Sans;
+    /*-fx-font-family:Open Sans;*/
     -fx-font-size: 11px; 
     -fx-opacity: 0.5;
 }
 #analyzeLabel{
-    -fx-font-family:Open Sans;
+    /*-fx-font-family:Open Sans;*/
     -fx-font-size: 20px;
     -fx-text-fill: white;
 }
 
 #selectImage{
-  -fx-font-family:Open Sans;
+  /*-fx-font-family:Open Sans;*/
   -fx-font-size: 15px; 
   -fx-text-fill: white;
 }
 .TextFiled{
-    -fx-font-family:Open Sans;
+    /*-fx-font-family:Open Sans;*/
     -fx-font-size: 10px;
     
 }
@@ -138,7 +138,7 @@ split-pane *.split-pane-divider {
 .table-view .column-header .label
 {
     
-    -fx-font-family:Open Sans;
+    /*-fx-font-family:Open Sans;*/
 
 }
 
