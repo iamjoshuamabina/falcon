@@ -1,0 +1,160 @@
+Label{
+    -fx-font-family:Open Sans;
+    -fx-font-size: 13px;
+}
+#key_value{
+    -fx-font-family:Open Sans;
+    -fx-font-size:14px;
+    -fx-font-weight:Bold;
+}
+
+#value_data{
+  -fx-font-family:Courier New;
+  -fx-font-size: 13px;  
+    
+}
+#value_key_IPTC{
+    -fx-font-family:Open Sans;
+    -fx-font-size:14px;
+    -fx-font-weight:Bold;
+    
+}
+#value_data_IPTC{
+  -fx-font-family:Courier New;
+  -fx-font-size: 13px;  
+    
+}
+#value_key_EXIF{
+    -fx-font-family:Open Sans;
+    -fx-font-size:14px;
+    -fx-font-weight:Bold;
+    
+}
+#value_data_EXIF{
+  -fx-font-family:Courier New;
+  -fx-font-size: 13px;  
+    
+}
+#hashes_key{
+    -fx-font-weight:Bold;
+    -fx-font-size:14px;
+    -fx-font-family:Open Sans;
+}
+
+#dashboardValue{
+    
+    -fx-font-size:14px;
+    -fx-font-family:Open Sans;  
+}
+MenuBar{
+    -fx-font-family:Open Sans;
+    -fx-font-size: 11px; 
+    -fx-opacity: 0.5;
+}
+#analyzeLabel{
+    -fx-font-family:Open Sans;
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+}
+
+#selectImage{
+  -fx-font-family:Open Sans;
+  -fx-font-size: 15px; 
+  -fx-text-fill: white;
+}
+.TextFiled{
+    -fx-font-family:Open Sans;
+    -fx-font-size: 10px;
+    
+}
+.text-field {
+        -fx-focus-color: -fx-control-inner-background ;
+    -fx-faint-focus-color: -fx-control-inner-background ;
+}
+.text-area {
+        -fx-focus-color: -fx-control-inner-background ;
+    -fx-faint-focus-color: -fx-control-inner-background ;
+}
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane
+{
+    -fx-tab-min-width:90px;
+   
+}
+
+.tab{
+    -fx-background-insets: 0 1 0 1,0,0;
+}
+.tab-pane .tab
+{
+    -fx-background-color:white;
+
+}
+
+.tab-pane .tab:selected
+{
+    -fx-background-color:white;
+    
+}
+
+.tab .tab-label { 
+    -fx-alignment: CENTER;
+    -fx-text-fill: #828282;
+    -fx-font-size: 12px;
+    
+}
+
+.tab:selected .tab-label { 
+    -fx-alignment: CENTER;
+    -fx-text-fill: #003333;
+    -fx-font-weight:Bold;
+}
+.tab-pane:top *.tab-header-area {
+    -fx-background-insets: 0, 0 0 1 0;
+ /* -fx-padding: 0.416667em 0.166667em 0.0em 0.833em; /* 5 2 0 10 */
+    -fx-padding: 0.416667em 0.166667em 0.0em 1.0em; /* overriden as 5 2 0 0 */
+}
+split-pane *.split-pane-divider {
+    -fx-padding: 0 1 0 1;
+}
+.split-pane{
+   
+    -fx-background-color:white;
+}
+.Border-Pane{
+    
+     -fx-background-color:green;
+}
+
+
+#dashboard{
+     -fx-background-color:white;
+    
+}
+
+.table-view .column-header .label
+{
+    
+    -fx-font-family:Open Sans;
+
+}
+
+#signatureDetect{
+    -fx-background-color:white;
+    
+}
+
+#grid-pane {
+-fx-background-color:whitesmoke;
+
+}
+#XMPGridPane{
+   -fx-border: 2px solid;
+   -fx-border-color:ghostwhite; 
+   -fx-background-color:white; 
+   -fx-padding: 2px;
+   
+}
