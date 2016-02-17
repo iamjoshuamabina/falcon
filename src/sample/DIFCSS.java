@@ -529,8 +529,8 @@ public class DIFCSS extends Application implements MapComponentInitializedListen
                      if(result_dialog.isPresent())
                      {
                         /*Creating SettingAPi Class Object*/
-                        SettingAPI set_api = new SettingAPI();
-                        set_api.updateAPIKey(result_dialog.get());
+//                        SettingAPI set_api = new SettingAPI();
+//                        set_api.updateAPIKey(result_dialog.get());
                          
                      }
                     }
