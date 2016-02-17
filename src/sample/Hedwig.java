@@ -23,12 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- *
- * Contains methods to handle CSS_Client's use cases
- * 
- **/
-
 public class Hedwig {
 
     private static URI BASE_URI;
@@ -36,7 +30,19 @@ public class Hedwig {
     private static String API_KEY;
     private static String CONFIG_FILE_PATH = "/tmp/mca_config_file.txt";
     private static CloseableHttpClient HEDWIG;
-    
+
+    private static ResponseHandler<String> responseHandler = httpResponse -> {
+        int status = httpResponse.getStatusLine().getStatusCode();
+        if (status >= 200 && status < 300) {
+            HttpEntity entity = httpResponse.getEntity();
+            return entity != null ? EntityUtils.toString(entity) : null;
+        } else {
+            return (new ClientProtocolException("Whoops! This table is taken: " + status)).toString();
+        }
+    };
+
+    public Hedwig() {
+    }
     
     public static void setBaseURI(String str) {
         BASE_URI = Location.assign(str);
@@ -54,7 +60,7 @@ public class Hedwig {
         return REMOTE_NAME;
     }
     
-    public static void setAPIKey() throws FileNotFoundException, IOException {
+    public static void setAPIKey() throws IOException {
         File configFile;
         configFile = new File(CONFIG_FILE_PATH);
         
@@ -64,7 +70,7 @@ public class Hedwig {
         
     }
     
-    public static void saveSettings(String str) throws FileNotFoundException, IOException {
+    public static void saveSettings(String str) throws IOException {
         File configFile;
         configFile = new File(CONFIG_FILE_PATH);
         
@@ -77,21 +83,6 @@ public class Hedwig {
         writer.write(str);
         writer.close();
     }
-
-    /**
-     * Sets base URI,
-     * routes packets to appropriate APIs
-     *
-     * @return 
-     * @throws IOException
-     *
-     * @param HedwigPacketList:
-     *      Contains a pair of values (key, value) to be bundled with the http request
-     *
-     * @param route:
-     *      Contains a name of the url to send the packets to
-     * @throws URISyntaxException
-     **/
 
     public static String go(Route route, ArrayList<HedwigPacket> HedwigPacketList)
             throws IOException, URISyntaxException {
@@ -158,7 +149,6 @@ public class Hedwig {
 
             httpGet = new HttpGet(getRemoteName());
             Console.log(Logger.INFO, "@Hedwig.gotoAnal < httpGet: " + httpGet.getURI() + ">");
-            
 
             return HEDWIG.execute(httpGet, responseHandler);
 
@@ -360,16 +350,6 @@ public class Hedwig {
         Console.log(Logger.INFO, "myCommand: " + myCommand);
 
     }
-
-    private static ResponseHandler<String> responseHandler = httpResponse -> {
-        int status = httpResponse.getStatusLine().getStatusCode();
-        if (status >= 200 && status < 300) {
-            HttpEntity entity = httpResponse.getEntity();
-            return entity != null ? EntityUtils.toString(entity) : null;
-        } else {
-            return (new ClientProtocolException("Whoops! This table is taken: " + status)).toString();
-        }
-    };
 
 
 }
