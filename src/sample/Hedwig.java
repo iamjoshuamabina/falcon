@@ -98,7 +98,7 @@ public class Hedwig {
 
         // TODO: bundle destination into the HedwigPacket instance
 
-        setBaseURI("http://127.0.0.1:8000/api/");
+        setBaseURI("http://127.0.0.1:9000/api/");
         setAPIKey();
         
         String response = null;
@@ -134,7 +134,7 @@ public class Hedwig {
     }
 
     public static String gotoAnal(String pk) throws IOException, URISyntaxException {
-        String api = "Images/analysis";
+        String api = "images/analysis";
         Console.log(Logger.INFO, "@Hedwig.gotoAnal <api: " + api + ">");
         Console.log(Logger.INFO, "@Hedwig.gotoAnal <pk: " + pk + ">");
         Console.log(Logger.INFO, "@Hedwig.gotoAnal <getRemoteName: " + getRemoteName() + ">");
@@ -169,9 +169,7 @@ public class Hedwig {
     }
 
     public static String gotoImages(HedwigPacket mHedwigPacket) throws IOException, URISyntaxException {
-        String api = "Images/";
-        Console.log(Logger.INFO, "@Hedwig.gotoImages -> Images index" );
-
+        String api = "images/";
         try{
             HEDWIG = HttpClients.createDefault();
             HttpGet httpGet;
@@ -224,7 +222,7 @@ public class Hedwig {
     }
 
     public static String addAnalysis(ArrayList<HedwigPacket> HedwigPacketList) throws IOException, URISyntaxException {
-        String api = "Images/analysis";
+        String api = "images/analysis";
         Console.log(Logger.INFO, "@Hedwig.addAnalysis -> api <" + api + ">");
 
         Map<String, String> args;
@@ -304,7 +302,7 @@ public class Hedwig {
     }
 
     public static String addImage(String case_id, String image) throws IOException {
-        String api = "Images/new";
+        String api = "images/new";
 
         // TODO: upload multiple Images
 
@@ -350,53 +348,17 @@ public class Hedwig {
     }
     
     public static void gotoCopyMove(String image) throws IOException {
-        String myCommand;
-//        myCommand = "python ../scripts/detect.py " + image;
-//        myCommand = "../scripts/test.sh";
-        
-        // Get the fucking root directory
-        myCommand = "pwd";
-        Console.log(Logger.INFO, myCommand);
-        StringBuffer output = new StringBuffer();
-        Process p;
-        try {
-            p = Runtime.getRuntime().exec(myCommand);
-            p.waitFor();
-            BufferedReader reader = 
-                new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-            String line = "";			
-            while ((line = reader.readLine())!= null) {
-                output.append(line + "\n");
-            }
-        } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-        }
-        
-        String rootDir = output.toString().trim();
-        Console.log(Logger.INFO, "rootDir: " + rootDir);
+        Process p;
+        String copyMoveScript = "/home/joshy/.mca/scripts/";
+        Console.log(Logger.INFO, "copyMoveScript: " + copyMoveScript);
         
         // Copy-move magic
         // myCommand = "python " + rootDir + "/src/scripts/detect.py " + image + " --blcoldev=0.05 --impalred=30 --blsim=100 --rgsim=2";
-        myCommand = "python " + rootDir + "/src/scripts/detect.py " + image;
+        String myCommand = "python " + copyMoveScript + "/src/scripts/detect.py " + image;
         
         Console.log(Logger.INFO, "myCommand: " + myCommand);
-        
-        try {
-            p = Runtime.getRuntime().exec(myCommand);
-            p.waitFor();
-            BufferedReader reader = 
-                new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-            String line = "";			
-            while ((line = reader.readLine())!= null) {
-                output.append(line + "\n");
-            }
-        } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-        }
-        Console.log(Logger.INFO, output.toString());
-        
     }
 
     private static ResponseHandler<String> responseHandler = httpResponse -> {
