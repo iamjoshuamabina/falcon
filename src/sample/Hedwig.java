@@ -30,8 +30,13 @@ public class Hedwig {
     private static URI BASE_URI;
     private static URI REMOTE_NAME;
     private static String API_KEY;
-    private static String CONFIG_FILE_PATH = "/home/joshy/.mca/mca.key";
-    private static CloseableHttpClient HEDWIG;
+    private static CloseableHttpClient CLOSEABLE_HTTP_CLIENT;
+
+    private final static String SCRIPTS_DIR = getEnvPath("scripts");
+    private final static String CONFIG_DIR = getEnvPath("config");
+
+    @SuppressWarnings("StringConcatenationMissingWhitespace")
+    private final static String KEY_FILE = CONFIG_DIR + "mca.key";
 
     private static ResponseHandler<String> responseHandler = httpResponse -> {
         int status = httpResponse.getStatusLine().getStatusCode();
@@ -61,10 +66,14 @@ public class Hedwig {
     public static URI getRemoteName() {
         return REMOTE_NAME;
     }
+
+    public static String getEnvPath(String pathString) {
+        return System.getenv("HOME") + "/.mca/" + pathString + "/";
+    }
     
     public static void setAPIKey() throws IOException {
         File configFile;
-        configFile = new File(CONFIG_FILE_PATH);
+        configFile = new File(KEY_FILE);
         
         BufferedReader bufferedReader = new BufferedReader(new FileReader(configFile));
         API_KEY = bufferedReader.readLine();
@@ -74,7 +83,7 @@ public class Hedwig {
     
     public static void saveSettings(String str) throws IOException {
         File configFile;
-        configFile = new File(CONFIG_FILE_PATH);
+        configFile = new File(KEY_FILE);
         
         if(!configFile.exists()) {
             configFile.createNewFile();
@@ -89,34 +98,34 @@ public class Hedwig {
     public static String go(Route route, ArrayList<HedwigPacket> HedwigPacketList)
             throws IOException, URISyntaxException {
 
-        setBaseURI("http://127.0.0.1:9000/api/");
+        setBaseURI("http://127.0.0.1:8000/api/");
+        Console.out(Logger.INFO, "BASE_URI: " + getBaseURI());
+
         setAPIKey();
-        
+        Console.out(Logger.INFO, "API_KEY: " + API_KEY);
+
         String response = null;
 
-        Console.log(Logger.INFO, "@Hedwig.go -> @method getBaseURI <" + getBaseURI() + ">");
-        Console.log(Logger.INFO, "@Hedwig.go -> @var route <" + route + ">");
-        
         // PacketRouting: Dear hedwig, kindly send my packets to...
         switch(route) {
             case ALL_CASES: {
-                Console.log(Logger.INFO, "@Hedwig.go @switch -> route switched to <" + route + ">");
+                Console.out(Logger.INFO, "@Hedwig.go @switch -> route switched to <" + route + ">");
                 response = gotoCases();
             } break;
 
             case ALL_IMAGES: {
-                Console.log(Logger.INFO, "@Hedwig.go @switch -> route switched to <" + route + ">");
+                Console.out(Logger.INFO, "@Hedwig.go @switch -> route switched to <" + route + ">");
                 response = gotoImages(HedwigPacketList.get(0));
             } break;
 
             case NEW_ANALYSIS: {
-                Console.log(Logger.INFO, "@Hedwig.go @switch -> route switched to <" + route + ">");
+                Console.out(Logger.INFO, "@Hedwig.go @switch -> route switched to <" + route + ">");
                 response = addAnalysis(HedwigPacketList);
             } break;
 
             case SHOW_ANALYSIS: {
-                Console.log(Logger.INFO, "@Hedwig.go @switch -> route switched to <" + route + ">");
-                response = gotoAnal("2");
+                Console.out(Logger.INFO, "@Hedwig.go @switch -> route switched to <" + route + ">");
+                response = getImageAnalysis("2");
             } break;
 
         }
@@ -124,114 +133,111 @@ public class Hedwig {
         return response;
     }
 
-    public static String gotoAnal(String pk) throws IOException, URISyntaxException {
+    public static String getImageAnalysis(String pk) throws IOException, URISyntaxException {
         String api = "images/analysis";
-        Console.log(Logger.INFO, "@Hedwig.gotoAnal <api: " + api + ">");
-        Console.log(Logger.INFO, "@Hedwig.gotoAnal <pk: " + pk + ">");
-        Console.log(Logger.INFO, "@Hedwig.gotoAnal <getRemoteName: " + getRemoteName() + ">");
+        Console.out(Logger.INFO, "@Hedwig.getImageAnalysis <api: " + api + ">");
+        Console.out(Logger.INFO, "@Hedwig.getImageAnalysis <pk: " + pk + ">");
+        Console.out(Logger.INFO, "@Hedwig.getImageAnalysis <getRemoteName: " + getRemoteName() + ">");
 
         try {
-            HEDWIG = HttpClients.createDefault();
+            CLOSEABLE_HTTP_CLIENT = HttpClients.createDefault();
             HttpGet httpGet;
 
             setRemoteName(Location.addPath(getBaseURI(), api));
-            Console.log(Logger.INFO, "@Hedwig.gotoAnal -> requesting analysis <"
+            Console.out(Logger.INFO, "@Hedwig.getImageAnalysis -> requesting analysis <"
                     + getRemoteName().toString() + ">");
 
             setRemoteName(new URIBuilder().setScheme(getRemoteName().getScheme())
-                    .setHost(getRemoteName().getHost())
-                    .setPort(getRemoteName().getPort())
-                    .setPath(getRemoteName().getPath())
-                    .setParameter("analysis_id", pk)
-                    .build()
+                            .setHost(getRemoteName().getHost())
+                            .setPort(getRemoteName().getPort())
+                            .setPath(getRemoteName().getPath())
+                            .setParameter("analysis_id", pk)
+                            .build()
             );
 
             httpGet = new HttpGet(getRemoteName());
-            Console.log(Logger.INFO, "@Hedwig.gotoAnal < httpGet: " + httpGet.getURI() + ">");
+            Console.out(Logger.INFO, "@Hedwig.getImageAnalysis < httpGet: " + httpGet.getURI() + ">");
 
-            return HEDWIG.execute(httpGet, responseHandler);
+            return CLOSEABLE_HTTP_CLIENT.execute(httpGet, responseHandler);
 
         } finally {
-            HEDWIG.close();
+            CLOSEABLE_HTTP_CLIENT.close();
         }
 
     }
 
-    public static String gotoImages(HedwigPacket mHedwigPacket) throws IOException, URISyntaxException {
+    public static String gotoImages(HedwigPacket hedwigPacket) throws IOException, URISyntaxException {
         String api = "images/";
         try{
-            HEDWIG = HttpClients.createDefault();
+            CLOSEABLE_HTTP_CLIENT = HttpClients.createDefault();
             HttpGet httpGet;
 
             setRemoteName(Location.addPath(getBaseURI(), api));
-            Console.log(Logger.INFO, "@Hedwig.gotoImages -> Images index <" +
-                    getRemoteName().toString() + ">");
-
             setRemoteName(new URIBuilder()
                             .setScheme(getRemoteName().getScheme())
                             .setHost(getRemoteName().getHost())
                             .setPort(getRemoteName().getPort())
                             .setPath(getRemoteName().getPath())
-                            .setParameter("case_id", mHedwigPacket.getValue())
+                            .setParameter("case_id", hedwigPacket.getValue())
                             .build()
             );
 
             httpGet = new HttpGet(getRemoteName());
-            Console.log(Logger.INFO, "@Hedwig.gotoImages -> Images index <" +
+            Console.out(Logger.INFO, "@Hedwig.gotoImages -> Images index <" +
                     httpGet.getURI() + ">");
 
-            return HEDWIG.execute(httpGet,responseHandler);
+            return CLOSEABLE_HTTP_CLIENT.execute(httpGet,responseHandler);
 
         } finally {
-            HEDWIG.close();
+            CLOSEABLE_HTTP_CLIENT.close();
         }
     }
 
     public static String gotoCases() throws IOException {
         String api = "cases/";
-        Console.log(Logger.INFO, "@Hedwig.gotoCases -> retrieving all analysis cases");
+        Console.out(Logger.INFO, "@Hedwig.gotoCases -> retrieving all analysis cases");
 
         try{
-            HEDWIG = HttpClients.createDefault();
+            CLOSEABLE_HTTP_CLIENT = HttpClients.createDefault();
             HttpGet httpGet;
 
             setRemoteName(Location.addPath(getBaseURI(), api));
-            Console.log(Logger.INFO, "@Hedwig.gotoCases -> Cases index <" +
+            Console.out(Logger.INFO, "@Hedwig.gotoCases -> Cases index <" +
                     getRemoteName().toString() + ">");
 
             httpGet = new HttpGet(getRemoteName());
 
-            return HEDWIG.execute(httpGet, responseHandler);
+            return CLOSEABLE_HTTP_CLIENT.execute(httpGet, responseHandler);
 
         } finally {
-            HEDWIG.close();
+            CLOSEABLE_HTTP_CLIENT.close();
         }
 
     }
 
     public static String addAnalysis(ArrayList<HedwigPacket> HedwigPacketList) throws IOException, URISyntaxException {
         String api = "images/analysis";
-        Console.log(Logger.INFO, "@Hedwig.addAnalysis -> api <" + api + ">");
+        Console.out(Logger.INFO, "@Hedwig.addAnalysis -> api <" + api + ">");
 
         Map<String, String> args;
 
         args = new HashMap<>();
         for(HedwigPacket mHedwigPacket : HedwigPacketList) {
-            Console.log(Logger.INFO, "@Hedwig.go @listIterator <"
+            Console.out(Logger.INFO, "@Hedwig.go @listIterator <"
                     + mHedwigPacket.getName() + " : " + mHedwigPacket.getValue() + ">");
             args.put(mHedwigPacket.getName(), mHedwigPacket.getValue());
         }
 
         String aCase;
         if(Objects.equals(aCase = addCase(args.get("name"), args.get("description")), null)) {
-            Console.log(Logger.INFO, "<aCase: " + aCase + ">");
-            Console.log(Logger.WARNING, "Whoops! I think you have better things to do...");
+            Console.out(Logger.INFO, "<aCase: " + aCase + ">");
+            Console.out(Logger.WARNING, "Whoops! I think you have better things to do...");
             return null;
         }
 
         String aImage;
         if(Objects.equals(aImage = addImage(aCase, args.get("image")), null)) {
-            Console.log(Logger.WARNING, "Whoops! Perhaps not being a jerk would be a great thing right...");
+            Console.out(Logger.WARNING, "Whoops! Perhaps not being a jerk would be a great thing right...");
             return null;
         }
         
@@ -239,12 +245,12 @@ public class Hedwig {
             Thread.sleep(5000);                 //1000 milliseconds is one second.
         } catch(InterruptedException e) {
             Thread.currentThread().interrupt();
-            Console.log(Logger.WARNING, e.getMessage());
+            Console.out(Logger.WARNING, e.getMessage());
         }   
 
         String anal;
-        if(Objects.equals(anal = gotoAnal(aImage), null)) {
-            Console.log(Logger.WARNING, "Cool story bro... it needs more dragon and...");
+        if(Objects.equals(anal = getImageAnalysis(aImage), null)) {
+            Console.out(Logger.WARNING, "Cool story bro... it needs more dragon and...");
             return null;
         }
 
@@ -253,14 +259,14 @@ public class Hedwig {
 
     public static String addCase(String name, String description) throws IOException {
         String api = "cases/new";
-        Console.log(Logger.WARNING,getBaseURI().toString());
-        Console.log(Logger.INFO, "<api_key: " + API_KEY + ">");
+        Console.out(Logger.WARNING, getBaseURI().toString());
+        Console.out(Logger.INFO, "<api_key: " + API_KEY + ">");
         try {
-            HEDWIG = HttpClients.createDefault();
+            CLOSEABLE_HTTP_CLIENT = HttpClients.createDefault();
             HttpPost httpPost;
 
             setRemoteName(Location.addPath(getBaseURI(), api));
-            Console.log(Logger.INFO, "@Hedwig.addCase -> adding a new case <"
+            Console.out(Logger.INFO, "@Hedwig.addCase -> adding a new case <"
                     + getRemoteName().toString() + ">");
 
             Map<String, String> args = new HashMap<>();
@@ -270,16 +276,16 @@ public class Hedwig {
 
             UrlEncodedFormEntity mFormEntity;
             mFormEntity = (UrlEncodedFormEntity) Location.addParam(args);
-            Console.log(Logger.INFO, "@Hedwig.addCase -> hedwig params <"
+            Console.out(Logger.INFO, "@Hedwig.addCase -> hedwig params <"
                     + mFormEntity.toString() + ">");
 
             httpPost = new HttpPost(getRemoteName());
             httpPost.setEntity(mFormEntity);
 
-            return HEDWIG.execute(httpPost, responseHandler);
+            return CLOSEABLE_HTTP_CLIENT.execute(httpPost, responseHandler);
 
         } catch (Exception e) {
-            Console.log(Logger.ERROR,
+            Console.out(Logger.ERROR,
                     "Whoops! @Hedwig.addCase -> bad hedwig... bad, bad hedwig\n" + e.getMessage());
         }
 
@@ -290,11 +296,11 @@ public class Hedwig {
         String api = "images/new";
 
         try {
-            HEDWIG = HttpClients.createDefault();
+            CLOSEABLE_HTTP_CLIENT = HttpClients.createDefault();
             HttpPost httpPost;
 
             setRemoteName(Location.addPath(getBaseURI(), api));
-            Console.log(Logger.INFO, "@Hedwig.addImage -> adding a new task <"
+            Console.out(Logger.INFO, "@Hedwig.addImage -> adding a new task <"
                     + getRemoteName().toString() + ">");
 
             HttpEntity mMultipartEntity;
@@ -306,25 +312,25 @@ public class Hedwig {
                         .addPart("image", new FileBody(new File(image)))
                         .build();
 
-                Console.log(Logger.INFO, "@Hedwig.addImage -> hedwig params <"
+                Console.out(Logger.INFO, "@Hedwig.addImage -> hedwig params <"
                         + mMultipartEntity.toString() + ">");
 
                 httpPost = new HttpPost(getRemoteName());
                 httpPost.setEntity(mMultipartEntity);
 
-                return HEDWIG.execute(httpPost, responseHandler);
+                return CLOSEABLE_HTTP_CLIENT.execute(httpPost, responseHandler);
 
             } catch(Exception e) {
-                Console.log(Logger.ERROR, "@Hedwig.addImage.mMultipartEntity <Whoops! We got a "
+                Console.out(Logger.ERROR, "@Hedwig.addImage.mMultipartEntity <Whoops! We got a "
                         + e.getMessage() + ">");
                 e.printStackTrace();
             }
 
         } catch (Exception e) {
-            Console.log(Logger.ERROR,
+            Console.out(Logger.ERROR,
                     "Whoops! @Hedwig.addImage <Whoops! " + e.getMessage() + ">");
         } finally {
-            HEDWIG.close();
+            CLOSEABLE_HTTP_CLIENT.close();
         }
 
         return null;
@@ -333,14 +339,10 @@ public class Hedwig {
     public static void gotoCopyMove(String image) throws IOException {
 
         Process p;
-        String copyMoveScript = "/home/joshy/.mca/scripts/";
-        Console.log(Logger.INFO, "copyMoveScript: " + copyMoveScript);
-        
-        // Copy-move magic
-        // myCommand = "python " + rootDir + "/src/scripts/detect.py " + image + " --blcoldev=0.05 --impalred=30 --blsim=100 --rgsim=2";
-        String myCommand = "python " + copyMoveScript + "/src/scripts/detect.py " + image;
-        
-        Console.log(Logger.INFO, "myCommand: " + myCommand);
+
+        @SuppressWarnings({"StringConcatenationMissingWhitespace", "SpellCheckingInspection"})
+        String copyMoveScript = SCRIPTS_DIR + "copymove.py";
+        Console.out(Logger.INFO, "copyMoveScript: " + copyMoveScript);
 
     }
 
