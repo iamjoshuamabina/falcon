@@ -14,6 +14,8 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import sample.utils.Logger;
+import sample.utils.Console;
 
 import java.io.*;
 import java.net.URI;
@@ -28,7 +30,7 @@ public class Hedwig {
     private static URI BASE_URI;
     private static URI REMOTE_NAME;
     private static String API_KEY;
-    private static String CONFIG_FILE_PATH = "/tmp/mca_config_file.txt";
+    private static String CONFIG_FILE_PATH = "/home/joshy/.mca/mca.key";
     private static CloseableHttpClient HEDWIG;
 
     private static ResponseHandler<String> responseHandler = httpResponse -> {
@@ -87,8 +89,6 @@ public class Hedwig {
     public static String go(Route route, ArrayList<HedwigPacket> HedwigPacketList)
             throws IOException, URISyntaxException {
 
-        // TODO: bundle destination into the HedwigPacket instance
-
         setBaseURI("http://127.0.0.1:9000/api/");
         setAPIKey();
         
@@ -138,7 +138,6 @@ public class Hedwig {
             Console.log(Logger.INFO, "@Hedwig.gotoAnal -> requesting analysis <"
                     + getRemoteName().toString() + ">");
 
-            // TODO: a better way to add params to an http request
             setRemoteName(new URIBuilder().setScheme(getRemoteName().getScheme())
                     .setHost(getRemoteName().getHost())
                     .setPort(getRemoteName().getPort())
@@ -168,7 +167,6 @@ public class Hedwig {
             Console.log(Logger.INFO, "@Hedwig.gotoImages -> Images index <" +
                     getRemoteName().toString() + ">");
 
-            // TODO: a better way to add params to an http request
             setRemoteName(new URIBuilder()
                             .setScheme(getRemoteName().getScheme())
                             .setHost(getRemoteName().getHost())
@@ -283,9 +281,6 @@ public class Hedwig {
         } catch (Exception e) {
             Console.log(Logger.ERROR,
                     "Whoops! @Hedwig.addCase -> bad hedwig... bad, bad hedwig\n" + e.getMessage());
-        } finally {
-            //Console.log(Logger.ERROR, "Baaaaadddd Headwig .... ");
-            //hedwig.close();
         }
 
         return null;
@@ -293,8 +288,6 @@ public class Hedwig {
 
     public static String addImage(String case_id, String image) throws IOException {
         String api = "images/new";
-
-        // TODO: upload multiple Images
 
         try {
             HEDWIG = HttpClients.createDefault();
