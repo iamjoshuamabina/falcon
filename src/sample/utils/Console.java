@@ -3,19 +3,16 @@ package sample.utils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-/**
- * Created by joshy on 4/25/15.
- *
- * A helper class implementing console methods
- *
- */
 public class Console {
 
-    public static void log(Logger level, String message) {
+    public Console() {
+    }
+
+    public static void out(Logger level, String message) {
         Logger.log(level, message);
     }
 
-    public static String input(String prompt) {
+    public static String in(String prompt) {
         BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
         prompt += ": ";
@@ -30,6 +27,7 @@ public class Console {
         }
     }
 
+    // TODO: A better way to get ASCII chars
     public static String color(int i) {
         return getASCIIChar(27) + "[" + i + "m";
     }
