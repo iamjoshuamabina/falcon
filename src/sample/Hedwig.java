@@ -20,10 +20,7 @@ import sample.utils.Console;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Hedwig {
 
@@ -34,6 +31,7 @@ public class Hedwig {
 
     private final static String SCRIPTS_DIR = getEnvPath("scripts");
     private final static String CONFIG_DIR = getEnvPath("config");
+    private final static String ANALYSIS_DIR = getEnvPath("analysis");
 
     @SuppressWarnings("StringConcatenationMissingWhitespace")
     private final static String KEY_FILE = CONFIG_DIR + "mca.key";
@@ -70,7 +68,11 @@ public class Hedwig {
     public static String getEnvPath(String pathString) {
         return System.getenv("HOME") + "/.mca/" + pathString + "/";
     }
-    
+
+    @SuppressWarnings("SuspiciousGetterSetter")
+    public static String getAnalysisDir() {
+        return ANALYSIS_DIR;
+    }
     public static void setAPIKey() throws IOException {
         File configFile;
         configFile = new File(KEY_FILE);
@@ -212,7 +214,6 @@ public class Hedwig {
         } finally {
             CLOSEABLE_HTTP_CLIENT.close();
         }
-
     }
 
     public static String addAnalysis(ArrayList<HedwigPacket> HedwigPacketList) throws IOException, URISyntaxException {
@@ -336,15 +337,33 @@ public class Hedwig {
         return null;
     }
     
-    public static void gotoCopyMove(String image) throws IOException {
-
-        Process p;
+    public static void gotoCopyMove(String imagePath) throws IOException {
 
         @SuppressWarnings({"StringConcatenationMissingWhitespace", "SpellCheckingInspection"})
-        String copyMoveScript = SCRIPTS_DIR + "copymove.py";
-        Console.out(Logger.INFO, "copyMoveScript: " + copyMoveScript);
+        final String COPY_MOVE_SCRIPT = SCRIPTS_DIR + "copymove.py";
+        Console.out(Logger.INFO, "COPY_MOVE_SCRIPT: " + COPY_MOVE_SCRIPT);
+
+        String cmdString = "python " + COPY_MOVE_SCRIPT + " " + imagePath;
+        Console.out(Logger.INFO, "cmdString (" + System.currentTimeMillis() + "): "  + cmdString);
+
+        Process process;
+        StringBuilder output = new StringBuilder();
+        try {
+            //noinspection CallToRuntimeExecWithNonConstantString
+            process = Runtime.getRuntime().exec(cmdString);
+            process.waitFor();
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = reader.readLine())!= null) {
+                output.append(line).append("\n");
+            }
+        } catch (IOException | InterruptedException e) {
+            Console.out(Logger.ERROR, e.getMessage());
+        }
+
+        Console.out(Logger.INFO, output.toString());
 
     }
-
-
 }
