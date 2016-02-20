@@ -6,6 +6,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import sample.utils.Console;
+import sample.utils.Logger;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,40 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by joshy on 5/9/15.
- *
- * Build and validate URLs
- *
- */
-
 public class Location {
-    /**
-     * @return valid URL
-     *
-     * @param str contains URL
-     *
-     * */
+
+    public Location(){
+    }
 
      public static URI assign(String str) {
         try {
             if(!str.startsWith("http")) return new URI("http://" + str);
             else return new URI(str);
         } catch(URISyntaxException e) {
-            Console.log(Logger.ERROR, "@Location.assign -> Whoops! Perhaps a malformed URL");
+            Console.out(Logger.ERROR, "Location.assign() -> " + e.getMessage());
         }
         return null;
     }
 
-    /**
-     * This method adds path to an already existing URI
-     *
-     * @param uri contains a valid URI
-     * @param str contains path to add to existing uri
-     *
-     * */
     public static URI addPath(URI uri, String str) {
         try {
+            //noinspection StringConcatenationMissingWhitespace
             return new URI(
                     new URIBuilder()
                             .setScheme(uri.getScheme())
@@ -58,9 +44,8 @@ public class Location {
             );
 
         } catch (URISyntaxException e) {
-            Console.log(Logger.ERROR, "@Location.addPath -> Whoops! Perhaps a something wrong with the URL");
+            Console.out(Logger.ERROR, "Location.addPath() -> " + e.getMessage());
         }
-
         return null;
     }
 
@@ -69,9 +54,6 @@ public class Location {
     }
 
     public static HttpEntity addParam(Map<String, String> args, boolean withEntity) {
-
-        // TODO: proper handler -> MultipartEntity, URLEncodedFormEntity, withoutEntity
-
         List<NameValuePair> params = new ArrayList<>();
         if(withEntity) {
             for(String key : args.keySet()) {
@@ -79,9 +61,9 @@ public class Location {
                 params.add(new BasicNameValuePair(key, value));
             }
             return new UrlEncodedFormEntity(params, Consts.UTF_8);
-        } else {
-            return null;
         }
+        //noinspection ReturnOfNull
+        return null;
     }
 
 
