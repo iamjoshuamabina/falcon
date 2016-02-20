@@ -12,23 +12,28 @@ public class Console {
         Logger.log(level, message);
     }
 
-    public static String in(String prompt) {
+    public static void out(String message) {
+        Logger.log(Logger.INFO, message);
+    }
+
+    public static String in(String promptString) {
         BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
-        prompt += ": ";
+        promptString += ": ";
 
-        System.out.print(prompt);
+        System.out.print(promptString);
         System.out.flush();
 
         try {
             return stdin.readLine().trim();
         } catch (Exception e) {
-            return "Whoops! I guess " + e.getMessage() + " was experienced";
+            Console.out(Logger.ERROR, "Console.in() -> " + e.getMessage());
         }
+        return null;
     }
 
-    // TODO: A better way to get ASCII chars
     public static String color(int i) {
+        //noinspection StringConcatenationMissingWhitespace
         return getASCIIChar(27) + "[" + i + "m";
     }
 
