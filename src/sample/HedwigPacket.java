@@ -1,20 +1,21 @@
 package sample;
 
+@SuppressWarnings("ClassWithoutNoArgConstructor")
 public class HedwigPacket {
-    private final String name;
-    private final String value;
-    private Route route;
+    private String name;
+    private String value;
+
 
     public HedwigPacket(String name, String value) {
         this.name = name;
         this.value = value;
     }
 
-    public String getName() {
+    public final String getName() {
         return this.name;
     }
 
-    public String getValue() {
+    public final String getValue() {
         return this.value;
     }
 }
