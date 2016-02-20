@@ -2,8 +2,12 @@ package sample.utils;
 
 public class Logger {
 
+    @SuppressWarnings("FieldHasSetterButNoGetter")
     private String name;
+
+    @SuppressWarnings("FieldHasSetterButNoGetter")
     private int value;
+
     private static boolean debugger = true;
 
     public static final Logger ERROR = new Logger("ERROR", 31);
@@ -24,11 +28,11 @@ public class Logger {
         }
     }
 
-    public void setName(String str) {
+    public final void setName(String str) {
         this.name = str;
     }
 
-    public void setValue(int i) {
+    public final void setValue(int i) {
         this.value = i;
     }
 
@@ -38,6 +42,7 @@ public class Logger {
 
     public static String setup(Logger mLogger, boolean b) {
         if(b) return Console.color(mLogger.value);
+        //noinspection ReturnOfNull
         return null;
     }
 
