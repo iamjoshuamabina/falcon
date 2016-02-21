@@ -236,8 +236,8 @@ public class Main extends Application implements MapComponentInitializedListener
                         }
 
                         Tab geolocationDataTab = new Tab("Geolocation Analysis Data");
-                        if (displayLocalizationDataBorderPane() != null) {
-                            geolocationDataTab.setContent(displayLocalizationDataBorderPane());
+                        if (displayGeolocationDataBorderPane() != null) {
+                            geolocationDataTab.setContent(displayGeolocationDataBorderPane());
                             analysisResultTabPane.getTabs().add(geolocationDataTab);
                         }
 
@@ -898,7 +898,7 @@ public class Main extends Application implements MapComponentInitializedListener
         return tempBorderPane;
     }
 
-    private BorderPane displayLocalizationDataBorderPane(){
+    private BorderPane displayGeolocationDataBorderPane(){
         try {
             mGoogleMapView = new GoogleMapView();
             mGoogleMapView.addMapInializedListener(this);
@@ -966,4 +966,4 @@ public class Main extends Application implements MapComponentInitializedListener
         launch(args);
     }
 
-} 
+}
