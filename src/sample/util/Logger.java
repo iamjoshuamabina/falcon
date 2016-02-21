@@ -1,4 +1,4 @@
-package sample.utils;
+package sample.util;
 
 public class Logger {
 

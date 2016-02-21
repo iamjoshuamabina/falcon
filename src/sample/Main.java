@@ -27,8 +27,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import sample.utils.Console;
-import sample.utils.Logger;
+import sample.util.Console;
+import sample.util.Logger;
 
 import java.awt.*;
 import java.io.File;
@@ -125,9 +125,13 @@ public class Main extends Application implements MapComponentInitializedListener
 
     @Override
     public final void mapInitialized() {
-        try {
-            MapOptions mapOptions = new MapOptions();
-            mapOptions.center(new LatLong(-6.17306, 35.7419))
+		GoogleMap mGoogleMap;
+		final double latitude = -6.17306;
+		final double longitude = 35.7419;
+
+		try {
+			MapOptions mapOptions = new MapOptions();
+			mapOptions.center(new LatLong(latitude, longitude))
                     .mapType(MapTypeIdEnum.ROADMAP)
                     .overviewMapControl(false)
                     .panControl(false)
@@ -137,16 +141,17 @@ public class Main extends Application implements MapComponentInitializedListener
                     .zoomControl(false)
                     .zoom(12);
 
-            GoogleMap mGoogleMap = mGoogleMapView.createMap(mapOptions);
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(new LatLong(-6.17306, 35.7419))
+			mGoogleMap = mGoogleMapView.createMap(mapOptions);
+
+			MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(new LatLong(latitude, longitude))
                     .visible(Boolean.TRUE)
                     .title("Photo Taken");
             Marker marker = new Marker( markerOptions );
             mGoogleMap.addMarker(marker);
 
         } catch(Exception e){
-            Console.out(Logger.ERROR, e.getMessage());
+            Console.out(Logger.ERROR, "mapInitialized() -> " + e.getMessage());
         }
     }
 
@@ -188,7 +193,7 @@ public class Main extends Application implements MapComponentInitializedListener
         analyzeButtonHBox.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 try {
-                    Hedwig.gotoCopyMove(imagePath);
+                    Ghiro.gotoCopyMove(imagePath);
                 } catch (IOException ex) {
                     Console.out(Logger.ERROR, ex.getMessage());
                 }
@@ -199,7 +204,7 @@ public class Main extends Application implements MapComponentInitializedListener
                 HedwigPacketArrayList.add(new HedwigPacket("image", imagePath));
 
                 try {
-                    analysisResultJsonString = Hedwig.analyse(Hedwig.Route.NEW_ANALYSIS, HedwigPacketArrayList);
+                    analysisResultJsonString = Ghiro.analyse(Ghiro.Route.NEW_ANALYSIS, HedwigPacketArrayList);
                     displaySplitPane(null);
 
                     if (analysisResultJsonString.isEmpty()) {
@@ -296,7 +301,7 @@ public class Main extends Application implements MapComponentInitializedListener
 
     private ScrollPane displayCopyMoveScrollPane() {
         String analyzedImagePath = new File(
-                Hedwig.getAnalysisDirectory() + "/"+ imageName.split("\\.")[0] +"_analyzed.jpg"
+                Ghiro.getAnalysisDirectory() + "/"+ imageName.split("\\.")[0] +"_analyzed.jpg"
         ).toURI().toString();
 
         ImageView analyzedImageView = new ImageView(new Image(analyzedImagePath));
@@ -884,7 +889,7 @@ public class Main extends Application implements MapComponentInitializedListener
                 String elaValueString = elaJsonObject.getString(elaKeyString);
                 //noinspection StringConcatenationMissingWhitespace
                 String elaImagePath
-                        = Hedwig.getBaseURI() + "analyses/images/file/" + elaValueString + "/";
+                        = Ghiro.getBaseURI() + "analyses/images/file/" + elaValueString + "/";
 
                 Image elaImageFile = new Image(elaImagePath);
                 ImageView elaImageFileImageView = new ImageView(elaImageFile);

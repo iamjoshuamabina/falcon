@@ -14,15 +14,16 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import sample.utils.Logger;
-import sample.utils.Console;
+import sample.util.Location;
+import sample.util.Logger;
+import sample.util.Console;
 
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
-public class Hedwig {
+public class Ghiro {
 
     private static URI BASE_URI;
     private static URI REMOTE_NAME;
@@ -52,16 +53,16 @@ public class Hedwig {
         SHOW_ANALYSIS,
     }
 
-    public Hedwig() {
+    public Ghiro() {
     }
-    
+
     public static void setBaseURI(String str) {
         BASE_URI = Location.assign(str);
     }
 
     @SuppressWarnings("SuspiciousGetterSetter")
     public static URI getBaseURI() {
-        return Hedwig.BASE_URI;
+        return Ghiro.BASE_URI;
     }
 
     @SuppressWarnings("SuspiciousGetterSetter")
@@ -85,11 +86,11 @@ public class Hedwig {
     public static void setAPIKey() throws IOException {
         File configFile;
         configFile = new File(KEY_FILE);
-        
+
         BufferedReader bufferedReader = new BufferedReader(new FileReader(configFile));
         API_KEY = bufferedReader.readLine();
         bufferedReader.close();
-        
+
     }
 
     public static String analyse(Route route, ArrayList<HedwigPacket> HedwigPacketList)
@@ -161,13 +162,13 @@ public class Hedwig {
         if(Objects.equals(aImage = addImage(aCase, args.get("image")), null)) {
             return null;
         }
-        
+
         try {
             Thread.sleep(10000);                 // 1000 milliseconds is one second.
         } catch(InterruptedException e) {
             Thread.currentThread().interrupt();
             Console.out(Logger.WARNING, e.getMessage());
-        }   
+        }
 
         String analysis;
         if(Objects.equals(analysis = getImageAnalysis(aImage), null)) {
@@ -240,7 +241,7 @@ public class Hedwig {
 
         return null;
     }
-    
+
     public static void gotoCopyMove(String imagePath) throws IOException {
 
         @SuppressWarnings({"StringConcatenationMissingWhitespace", "SpellCheckingInspection"})

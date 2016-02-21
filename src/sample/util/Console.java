@@ -1,4 +1,4 @@
-package sample.utils;
+package sample.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

@@ -1,4 +1,4 @@
-package sample;
+package sample.util;
 
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
@@ -6,8 +6,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import sample.utils.Console;
-import sample.utils.Logger;
 
 import java.net.URI;
 import java.net.URISyntaxException;
