@@ -1,6 +1,8 @@
 package sample;
 
+import org.json.JSONObject;
 import sample.util.Console;
+import sample.util.Logger;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -22,9 +24,12 @@ public class Test {
 
 		try {
 			resultJsonString = Ghiro.analyse(Ghiro.Route.NEW_ANALYSIS, ghiroBundleList);
-			Console.out(resultJsonString);
+
+			JSONObject metadataJsonObject = new JSONObject(resultJsonString).getJSONObject("metadata");
+			Console.out("Metadata: " + metadataJsonObject.toString());
+
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			Console.out(Logger.ERROR, e.getMessage());
 		}
 
 		return null;
