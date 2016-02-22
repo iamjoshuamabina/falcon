@@ -93,7 +93,7 @@ public class Ghiro {
 
     }
 
-    public static String analyse(Route route, ArrayList<HedwigPacket> HedwigPacketList)
+    public static String analyse(Route route, ArrayList<GhiroBundle> ghiroBundleList)
             throws IOException, URISyntaxException {
 
         setBaseURI("http://127.0.0.1:8000/api/");
@@ -106,7 +106,7 @@ public class Ghiro {
 
         switch(route) {
             case NEW_ANALYSIS: {
-                response = addAnalysis(HedwigPacketList);
+                response = addAnalysis(ghiroBundleList);
             } break;
 
             case SHOW_ANALYSIS: {
@@ -131,7 +131,6 @@ public class Ghiro {
                             .build()
             );
 
-
             HttpGet httpGet;
             httpGet = new HttpGet(getRemoteName());
 
@@ -145,11 +144,11 @@ public class Ghiro {
 
     }
 
-    public static String addAnalysis(ArrayList<HedwigPacket> HedwigPacketList) throws IOException, URISyntaxException {
+    public static String addAnalysis(ArrayList<GhiroBundle> ghiroBundleList) throws IOException, URISyntaxException {
         Map<String, String> args;
         args = new HashMap<>();
-        for(HedwigPacket mHedwigPacket : HedwigPacketList) {
-            args.put(mHedwigPacket.getName(), mHedwigPacket.getValue());
+        for(GhiroBundle mGhiroBundle : ghiroBundleList) {
+            args.put(mGhiroBundle.getName(), mGhiroBundle.getValue());
         }
 
         String aCase;
@@ -242,7 +241,7 @@ public class Ghiro {
         return null;
     }
 
-    public static void gotoCopyMove(String imagePath) throws IOException {
+    public static void getCopyMoveAnalysisData(String imagePath) throws IOException {
 
         @SuppressWarnings({"StringConcatenationMissingWhitespace", "SpellCheckingInspection"})
         final String COPY_MOVE_SCRIPT = SCRIPTS_DIR + "copymove.py";
@@ -270,5 +269,24 @@ public class Ghiro {
 
         Console.out(Logger.INFO, output.toString());
 
+    }
+
+	@SuppressWarnings("ClassWithoutNoArgConstructor")
+    public static class GhiroBundle {
+        private String name;
+        private String value;
+
+        public GhiroBundle(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public final String getName() {
+            return this.name;
+        }
+
+        public final String getValue() {
+            return this.value;
+        }
     }
 }
