@@ -38,8 +38,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Main extends Application implements MapComponentInitializedListener {
-    private String imageName, imagePath;
-    private long imageSize;
+	private long imageSize;
+	private String imageName, imagePath;
+	private boolean canUseExperimentalFeatures = false;
 
     private final String[] colors = {
             "#330033", "#000066", "#006600", "#333333",
@@ -65,6 +66,7 @@ public class Main extends Application implements MapComponentInitializedListener
     private GridPane caseDetailGridPane;
     private TextField caseTitleTextField;
     private TextArea caseDescriptionField;
+	private CheckBox canUseExperimentalFeaturesCheckBox;
     private final Label caseTitleLabel = new Label("Title");
     private final Label caseDescriptionLabel = new Label("Description");
     private final Label analyzeImageButtonLabel = new Label("Analyze Image");
@@ -117,6 +119,8 @@ public class Main extends Application implements MapComponentInitializedListener
         selectImageFileLabel.setId("selectImage");
 
         analyzeImageButtonLabel.setId("analyzeLabel");
+
+		canUseExperimentalFeaturesCheckBox = new CheckBox("Use experimental features?");
 
         selectedImageFileImageView.setFitHeight(299);
         selectedImageFileImageView.setFitWidth(400);
@@ -840,15 +844,28 @@ public class Main extends Application implements MapComponentInitializedListener
 		fileChooserButtonHBox.setOnMouseEntered(event -> fileChooserButtonHBox.setOpacity(0.5));
 		fileChooserButtonHBox.setOnMouseExited(event -> fileChooserButtonHBox.setOpacity(1));
 
+		canUseExperimentalFeaturesCheckBox.setOnMouseClicked(event -> {
+			if(canUseExperimentalFeaturesCheckBox.isSelected()) {
+				canUseExperimentalFeatures = true;
+				Console.out("Falcon is using experimental features");
+			} else {
+				canUseExperimentalFeatures = false;
+				Console.out("Falcon is not using experimental features");
+			}
+		});
+
 		analyzeButtonHBox.setAlignment(Pos.CENTER);
 		analyzeButtonHBox.setStyle("-fx-background-color:#3a88ad;");
 		analyzeButtonHBox.getChildren().add(analyzeImageButtonLabel);
 		analyzeButtonHBox.setOnMouseClicked(event -> {
 			if (event.getButton() == MouseButton.PRIMARY) {
-				try {
-					Ghiro.getCopyMoveAnalysisData(imagePath);
-				} catch (IOException ex) {
-					Console.out(Logger.ERROR, ex.getMessage());
+
+				if(canUseExperimentalFeatures) {
+					try {
+						Ghiro.getCopyMoveAnalysisData(imagePath);
+					} catch (IOException ex) {
+						Console.out(Logger.ERROR, ex.getMessage());
+					}
 				}
 
 				ArrayList<Ghiro.GhiroBundle> ghiroBundleList = new ArrayList<>();
@@ -910,6 +927,7 @@ public class Main extends Application implements MapComponentInitializedListener
 							copymoveDataTab.setContent(displayCopyMoveScrollPane());
 							analysisResultTabPane.getTabs().add(copymoveDataTab);
 						}
+
 						if (displayElaDataBorderPane() != null) {
 							Tab errorLevelAnalysisDataTab = new Tab("Error Level Analysis Data");
 							errorLevelAnalysisDataTab.setContent(displayElaDataBorderPane());
@@ -942,6 +960,7 @@ public class Main extends Application implements MapComponentInitializedListener
 		caseDetailGridPane.add(caseDescriptionField, 1, 2, 150, 1);
 		caseDetailGridPane.add(fileChooserButtonHBox, 1, 3, 150, 1);
 		caseDetailGridPane.add(analyzeButtonHBox, 1, 4, 150, 1);
+		caseDetailGridPane.add(canUseExperimentalFeaturesCheckBox, 1, 5);
 		caseDetailGridPane.add(analyzeImageHolderVBox, 190, 0, 254, 5);
 		caseDetailGridPane.add(imageDetailsVBox, 450, 0, 170, 5);
 

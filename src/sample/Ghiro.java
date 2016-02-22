@@ -24,7 +24,6 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 public class Ghiro {
-
     private static URI BASE_URI;
     private static URI REMOTE_NAME;
     private static String API_KEY;
