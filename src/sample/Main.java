@@ -624,7 +624,7 @@ public class Main extends Application implements MapComponentInitializedListener
 				elaImageFileImageView.setFitHeight(Double.parseDouble(FIT_HEIGHT));
 				elaImageFileImageView.setFitWidth(Double.parseDouble(FIT_WIDTH));
                 tempBorderPane.setCenter(elaImageFileImageView);
-				
+
                 return tempBorderPane;
             }
 
