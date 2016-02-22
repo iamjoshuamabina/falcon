@@ -42,6 +42,9 @@ public class Main extends Application implements MapComponentInitializedListener
 	private String imageName, imagePath;
 	private boolean canUseExperimentalFeatures = false;
 
+	private final String FIT_HEIGHT = "300";
+	private final String FIT_WIDTH = "400";
+
     private final String[] colors = {
             "#330033", "#000066", "#006600", "#333333",
             "#93B514", "#93B514", "#FF2F88", "#FF3C41"
@@ -122,8 +125,8 @@ public class Main extends Application implements MapComponentInitializedListener
 
 		canUseExperimentalFeaturesCheckBox = new CheckBox("Use experimental features?");
 
-        selectedImageFileImageView.setFitHeight(299);
-        selectedImageFileImageView.setFitWidth(400);
+		selectedImageFileImageView.setFitHeight(Double.parseDouble(FIT_HEIGHT));
+		selectedImageFileImageView.setFitWidth(Double.parseDouble(FIT_WIDTH));
 
         analysisResultTabPane = new TabPane();
     }
@@ -170,6 +173,8 @@ public class Main extends Application implements MapComponentInitializedListener
         String analyzedImagePath = analyzedImageFile.toURI().toString();
 
         ImageView analyzedImageView = new ImageView(new Image(analyzedImagePath));
+		analyzedImageView.setFitHeight(Double.parseDouble(FIT_HEIGHT));
+		analyzedImageView.setFitWidth(Double.parseDouble(FIT_WIDTH));
         analyzedImageView.setStyle("-fx-padding: 2px");
         analyzedImageView.setStyle("-fx-background-color:white;");
 
@@ -617,7 +622,6 @@ public class Main extends Application implements MapComponentInitializedListener
                 Image elaImageFile = new Image(elaImagePath);
                 ImageView elaImageFileImageView = new ImageView(elaImageFile);
                 tempBorderPane.setCenter(elaImageFileImageView);
-
                 return tempBorderPane;
             }
 
