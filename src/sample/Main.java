@@ -331,68 +331,74 @@ public class Main extends Application implements MapComponentInitializedListener
 
         try {
             JSONObject metadataJsonObject = new JSONObject(analysisResultJsonString).getJSONObject("metadata");
-            JSONObject exifJsonObject = metadataJsonObject.getJSONObject("Exif");
 
-            int tempLastRowIndex = 0;
-            JSONArray exifDataJsonArray = exifJsonObject.names();
+			if(metadataJsonObject.has("Exif")) {
+				JSONObject exifJsonObject = metadataJsonObject.getJSONObject("Exif");
 
-            for(int i = 0; i < exifDataJsonArray.length(); i++){
-                String tempKeyString = exifDataJsonArray.getString(i);
-                JSONObject tempJsonObject = exifJsonObject.getJSONObject(tempKeyString);
-                JSONArray tempJsonArray = tempJsonObject.names();
+				int tempLastRowIndex = 0;
+				JSONArray exifDataJsonArray = exifJsonObject.names();
 
-                for(int j = 0; j < tempJsonArray.length(); j++) {
+				for(int i = 0; i < exifDataJsonArray.length(); i++){
+					String tempKeyString = exifDataJsonArray.getString(i);
+					JSONObject tempJsonObject = exifJsonObject.getJSONObject(tempKeyString);
+					JSONArray tempJsonArray = tempJsonObject.names();
 
-                    Label tempExifDataKeyLabel = new Label();
-                    tempExifDataKeyLabel.setId("value_key_EXIF");
-                    tempExifDataKeyLabel.setTextFill(Color.web(colors[i]));
+					for(int j = 0; j < tempJsonArray.length(); j++) {
 
-                    Label tempExifDataValueLabel = new Label();
-                    tempExifDataValueLabel.setId("value_data_EXIF");
-                    tempExifDataValueLabel.setTextFill(Color.web(colors[i]));
+						Label tempExifDataKeyLabel = new Label();
+						tempExifDataKeyLabel.setId("value_key_EXIF");
+						tempExifDataKeyLabel.setTextFill(Color.web(colors[i]));
 
-                    String tempExifDataKeyString = tempJsonArray.getString(j);
-                    tempExifDataKeyLabel.setText(tempExifDataKeyString);
+						Label tempExifDataValueLabel = new Label();
+						tempExifDataValueLabel.setId("value_data_EXIF");
+						tempExifDataValueLabel.setTextFill(Color.web(colors[i]));
 
-                    String tempExifDataValueString = ":" + " " + tempJsonObject.getString(tempExifDataKeyString);
-                    tempExifDataValueLabel.setText(tempExifDataValueString);
+						String tempExifDataKeyString = tempJsonArray.getString(j);
+						tempExifDataKeyLabel.setText(tempExifDataKeyString);
 
-                    HBox tempHBox = new HBox();
-                    tempHBox.getChildren().addAll(tempExifDataKeyLabel, tempExifDataValueLabel);
-                    exifDataGridPane.add(tempHBox, 15, tempLastRowIndex, 20, 1);
-                    if(j == tempJsonArray.length()) {
-                        tempLastRowIndex = j;
-                    } else {
-                        tempLastRowIndex++;
-                    }
-                }
+						String tempExifDataValueString = ":" + " " + tempJsonObject.getString(tempExifDataKeyString);
+						tempExifDataValueLabel.setText(tempExifDataValueString);
 
-                if(tempKeyString.equalsIgnoreCase("photo")){
-                    exifDataGridPane.add(new Label(tempKeyString.toUpperCase()), 0, tempLastRowIndex, 5, 1);
-                } else if(tempKeyString.equalsIgnoreCase("image")){
-                    exifDataGridPane.add(new Label(tempKeyString.toUpperCase()), 0, tempLastRowIndex, 5, 1);
+						HBox tempHBox = new HBox();
+						tempHBox.getChildren().addAll(tempExifDataKeyLabel, tempExifDataValueLabel);
+						exifDataGridPane.add(tempHBox, 15, tempLastRowIndex, 20, 1);
+						if(j == tempJsonArray.length()) {
+							tempLastRowIndex = j;
+						} else {
+							tempLastRowIndex++;
+						}
+					}
 
-                } else if(tempKeyString.equalsIgnoreCase("Thumbnail")){
-                    exifDataGridPane.add(new Label(tempKeyString.toUpperCase()), 0, tempLastRowIndex, 5, 1);
+					if(tempKeyString.equalsIgnoreCase("photo")){
+						exifDataGridPane.add(new Label(tempKeyString.toUpperCase()), 0, tempLastRowIndex, 5, 1);
+					} else if(tempKeyString.equalsIgnoreCase("image")){
+						exifDataGridPane.add(new Label(tempKeyString.toUpperCase()), 0, tempLastRowIndex, 5, 1);
 
-                } else if(tempKeyString.equalsIgnoreCase("iop")){
-                    exifDataGridPane.add(new Label(tempKeyString.toUpperCase()), 0, tempLastRowIndex, 5, 1);
-                }
-            }
+					} else if(tempKeyString.equalsIgnoreCase("Thumbnail")){
+						exifDataGridPane.add(new Label(tempKeyString.toUpperCase()), 0, tempLastRowIndex, 5, 1);
 
-            VBox mainVBox = new VBox();
-            mainVBox.setStyle("-fx-background-color:white;");
-            mainVBox.getChildren().add(exifDataGridPane);
-            mainVBox.setFillWidth(true);
-            mainVBox.setStyle("-fx-background-color:white;");
+					} else if(tempKeyString.equalsIgnoreCase("iop")){
+						exifDataGridPane.add(new Label(tempKeyString.toUpperCase()), 0, tempLastRowIndex, 5, 1);
+					}
+				}
 
-            ScrollPane exifDataScrollPane = new ScrollPane();
-            exifDataScrollPane.setFitToHeight(true);
-            exifDataScrollPane.setFitToWidth(true);
-            exifDataScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+				VBox mainVBox = new VBox();
+				mainVBox.setStyle("-fx-background-color:white;");
+				mainVBox.getChildren().add(exifDataGridPane);
+				mainVBox.setFillWidth(true);
+				mainVBox.setStyle("-fx-background-color:white;");
 
-            exifDataScrollPane.setContent(mainVBox);
-            return exifDataScrollPane;
+				ScrollPane exifDataScrollPane = new ScrollPane();
+				exifDataScrollPane.setFitToHeight(true);
+				exifDataScrollPane.setFitToWidth(true);
+				exifDataScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+				exifDataScrollPane.setContent(mainVBox);
+				return exifDataScrollPane;
+
+			} else {
+				return null;
+			}
 
         } catch(Exception e) {
             Console.out(Logger.ERROR, e.getMessage());
