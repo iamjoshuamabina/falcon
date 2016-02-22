@@ -554,21 +554,26 @@ public class Main extends Application implements MapComponentInitializedListener
 
 	private BorderPane displayGpsDataBorderPane() {
 		try {
-
 			JSONObject metadataJsonObject = new JSONObject(analysisResultJsonString).getJSONObject("metadata");
-			JSONObject gpsDataJsonObject = metadataJsonObject.getJSONObject("gps");
-			JSONObject posGpsDataJsonObject = gpsDataJsonObject.getJSONObject("pos");
+			if(metadataJsonObject.has("gps")) {
+				JSONObject gpsDataJsonObject = metadataJsonObject.getJSONObject("gps");
+				JSONObject posGpsDataJsonObject = gpsDataJsonObject.getJSONObject("pos");
 
-			googleMapViewLatitude = Double.parseDouble(String.valueOf(posGpsDataJsonObject.get("Latitude")));
-			googleMapViewLongitude = Double.parseDouble(String.valueOf(posGpsDataJsonObject.get("Longitude")));
+				googleMapViewLatitude = Double.parseDouble(String.valueOf(posGpsDataJsonObject.get("Latitude")));
+				googleMapViewLongitude = Double.parseDouble(String.valueOf(posGpsDataJsonObject.get("Longitude")));
+				mGoogleMapView = new GoogleMapView();
+				mGoogleMapView.addMapInializedListener(this);
 
-			mGoogleMapView = new GoogleMapView();
-			mGoogleMapView.addMapInializedListener(this);
-			BorderPane borderPane = new BorderPane();
-			borderPane.setPadding(new Insets(10));
-			borderPane.setCenter(mGoogleMapView);
-			borderPane.setStyle("-fx-background-color:whitesmoke;");
-			return borderPane;
+				BorderPane borderPane = new BorderPane();
+				borderPane.setPadding(new Insets(10));
+				borderPane.setCenter(mGoogleMapView);
+				borderPane.setStyle("-fx-background-color:whitesmoke;");
+
+				return borderPane;
+
+			} else {
+				return null;
+			}
 
 		} catch(Exception e){
 			Console.out(Logger.ERROR, e.getMessage());
