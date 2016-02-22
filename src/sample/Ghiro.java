@@ -95,7 +95,7 @@ public class Ghiro {
     public static String analyse(Route route, ArrayList<GhiroBundle> ghiroBundleList)
             throws IOException, URISyntaxException {
 
-        setBaseURI("http://127.0.0.1:8000/api/");
+        setBaseURI("http://127.0.0.1:8000/");
 
         setAPIKey();
 
@@ -111,7 +111,7 @@ public class Ghiro {
     }
 
     public static String getImageAnalysis(String pk) throws IOException, URISyntaxException {
-        String api = "images/analysis";
+        String api = "api/images/analysis";
 
         try {
             setRemoteName(Location.addPath(getBaseURI(), api));
@@ -169,7 +169,7 @@ public class Ghiro {
     }
 
     public static String addCase(String name, String description) throws IOException {
-        String api = "cases/new";
+        String api = "api/cases/new";
 
         try {
             setRemoteName(Location.addPath(getBaseURI(), api));
@@ -198,7 +198,7 @@ public class Ghiro {
     }
 
     public static String addImage(String case_id, String image) throws IOException {
-        String api = "images/new";
+        String api = "api/images/new";
 
         try {
             setRemoteName(Location.addPath(getBaseURI(), api));
@@ -241,7 +241,8 @@ public class Ghiro {
         String cmdString = "python " + COPY_MOVE_SCRIPT + " " + imagePath;
 
         Process process;
-        StringBuilder output = new StringBuilder();
+		//noinspection MismatchedQueryAndUpdateOfStringBuilder
+		StringBuilder output = new StringBuilder();
         try {
             //noinspection CallToRuntimeExecWithNonConstantString
             process = Runtime.getRuntime().exec(cmdString);
