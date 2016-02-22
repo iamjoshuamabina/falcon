@@ -1,6 +1,5 @@
 Image, Audio, and Video Forensics Software
 
-- Get/display geolocation data
 - Store all config values i.e. BASE_URL, ACTIVE_PORT, API_KEY
-- Start Ghiro services as needed
 - Add copymove summary data onto summary tab
+- Start Ghiro services as needed
