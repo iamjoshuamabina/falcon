@@ -480,72 +480,77 @@ public class Main extends Application implements MapComponentInitializedListener
         xmpDataGridPane.setHgap(5);
 
         try {
-            JSONObject metadataJsonObject =new JSONObject(analysisResultJsonString).getJSONObject("metadata");
-            JSONObject xmpDataJsonObject = metadataJsonObject.getJSONObject("Xmp");
-            JSONArray xmpDataJsonArray = xmpDataJsonObject.names();
+            JSONObject metadataJsonObject = new JSONObject(analysisResultJsonString).getJSONObject("metadata");
 
-            int tempLastRowIndex = 0;
-            for(int i = 0; i < xmpDataJsonArray.length(); i++) {
-                String xmpDataKeyString = xmpDataJsonArray.getString(i);
+			if(metadataJsonObject.has("Xmp")) {
+				JSONObject xmpDataJsonObject = metadataJsonObject.getJSONObject("Xmp");
+				JSONArray xmpDataJsonArray = xmpDataJsonObject.names();
 
-                JSONObject tempXmpDataJsonObject = xmpDataJsonObject.getJSONObject(xmpDataKeyString);
-                JSONArray tempXmpDataJsonArray = tempXmpDataJsonObject.names();
+				int tempLastRowIndex = 0;
+				for(int i = 0; i < xmpDataJsonArray.length(); i++) {
+					String xmpDataKeyString = xmpDataJsonArray.getString(i);
 
-                for(int j = 0; j < tempXmpDataJsonArray.length(); j++){
+					JSONObject tempXmpDataJsonObject = xmpDataJsonObject.getJSONObject(xmpDataKeyString);
+					JSONArray tempXmpDataJsonArray = tempXmpDataJsonObject.names();
 
-                    HBox tempHBox = new HBox();
+					for(int j = 0; j < tempXmpDataJsonArray.length(); j++){
 
-                    Label tempXmpDataKeyLabel = new Label();
-                    tempXmpDataKeyLabel.setId("key_value");
-                    tempXmpDataKeyLabel.setTextFill(Color.web(colors[i]));
+						HBox tempHBox = new HBox();
 
-                    Label tempXmpDataValueLabel = new Label();
-                    tempXmpDataValueLabel.setId("value_data");
-                    tempXmpDataValueLabel.setTextFill(Color.web(colors[i]));
+						Label tempXmpDataKeyLabel = new Label();
+						tempXmpDataKeyLabel.setId("key_value");
+						tempXmpDataKeyLabel.setTextFill(Color.web(colors[i]));
 
-                    String key = tempXmpDataJsonArray.getString(j);
-                    tempXmpDataKeyLabel.setText(key);
-                    String value = ":" + " " + tempXmpDataJsonObject.getString(key);
-                    tempXmpDataValueLabel.setText(value);
-                    tempHBox.getChildren().addAll(tempXmpDataKeyLabel, tempXmpDataValueLabel);
-                    xmpDataGridPane.add(tempHBox, 15, tempLastRowIndex, 20, 1);
-                    if(j==tempXmpDataJsonArray.length()){
-                        tempLastRowIndex=j;
-                    } else{
-                        tempLastRowIndex++;
-                    }
-                }
+						Label tempXmpDataValueLabel = new Label();
+						tempXmpDataValueLabel.setId("value_data");
+						tempXmpDataValueLabel.setTextFill(Color.web(colors[i]));
 
-                if(xmpDataKeyString.equalsIgnoreCase("xmpMM")){
-                    xmpDataGridPane.add(new Label(xmpDataKeyString.toUpperCase()), 0, tempLastRowIndex - 28, 5, 1);
-                } else if(xmpDataKeyString.equalsIgnoreCase("photoshop")){
-                    xmpDataGridPane.add(new Label(xmpDataKeyString.toUpperCase()), 0, tempLastRowIndex - 3, 5, 1);
+						String key = tempXmpDataJsonArray.getString(j);
+						tempXmpDataKeyLabel.setText(key);
+						String value = ":" + " " + tempXmpDataJsonObject.getString(key);
+						tempXmpDataValueLabel.setText(value);
+						tempHBox.getChildren().addAll(tempXmpDataKeyLabel, tempXmpDataValueLabel);
+						xmpDataGridPane.add(tempHBox, 15, tempLastRowIndex, 20, 1);
+						if(j==tempXmpDataJsonArray.length()){
+							tempLastRowIndex=j;
+						} else{
+							tempLastRowIndex++;
+						}
+					}
 
-                } else if(xmpDataKeyString.equalsIgnoreCase("xmp")){
-                    xmpDataGridPane.add(new Label(xmpDataKeyString.toUpperCase()), 0, tempLastRowIndex - 3, 5, 1);
+					if(xmpDataKeyString.equalsIgnoreCase("xmpMM")){
+						xmpDataGridPane.add(new Label(xmpDataKeyString.toUpperCase()), 0, tempLastRowIndex - 28, 5, 1);
+					} else if(xmpDataKeyString.equalsIgnoreCase("photoshop")){
+						xmpDataGridPane.add(new Label(xmpDataKeyString.toUpperCase()), 0, tempLastRowIndex - 3, 5, 1);
 
-                } else if(xmpDataKeyString.equalsIgnoreCase("dc")){
-                    xmpDataGridPane.add(new Label(xmpDataKeyString.toUpperCase()), 0, tempLastRowIndex - 2, 5, 1);
+					} else if(xmpDataKeyString.equalsIgnoreCase("xmp")){
+						xmpDataGridPane.add(new Label(xmpDataKeyString.toUpperCase()), 0, tempLastRowIndex - 3, 5, 1);
 
-                } else if(xmpDataKeyString.equalsIgnoreCase("xmp")){
-                    xmpDataGridPane.add(new Button(xmpDataKeyString.toUpperCase()), 0, tempLastRowIndex - 3, 5, 1);
-                }
-            }
+					} else if(xmpDataKeyString.equalsIgnoreCase("dc")){
+						xmpDataGridPane.add(new Label(xmpDataKeyString.toUpperCase()), 0, tempLastRowIndex - 2, 5, 1);
 
-            VBox mainVBox = new VBox();
-            mainVBox.setPadding(new Insets(5));
-            mainVBox.setStyle("-fx-background-color:white;");
-            mainVBox.getChildren().add(xmpDataGridPane);
-            mainVBox.setFillWidth(true);
+					} else if(xmpDataKeyString.equalsIgnoreCase("xmp")){
+						xmpDataGridPane.add(new Button(xmpDataKeyString.toUpperCase()), 0, tempLastRowIndex - 3, 5, 1);
+					}
+				}
 
-            ScrollPane xmpDataScrollPane = new ScrollPane();
-            xmpDataScrollPane.setStyle("-fx-background-color:white;");
-            xmpDataScrollPane.setFitToHeight(true);
-            xmpDataScrollPane.setFitToWidth(true);
-            xmpDataScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-            xmpDataScrollPane.setContent(mainVBox);
+				VBox mainVBox = new VBox();
+				mainVBox.setPadding(new Insets(5));
+				mainVBox.setStyle("-fx-background-color:white;");
+				mainVBox.getChildren().add(xmpDataGridPane);
+				mainVBox.setFillWidth(true);
 
-            return xmpDataScrollPane;
+				ScrollPane xmpDataScrollPane = new ScrollPane();
+				xmpDataScrollPane.setStyle("-fx-background-color:white;");
+				xmpDataScrollPane.setFitToHeight(true);
+				xmpDataScrollPane.setFitToWidth(true);
+				xmpDataScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+				xmpDataScrollPane.setContent(mainVBox);
+
+				return xmpDataScrollPane;
+			} else {
+				return null;
+			}
 
         } catch(Exception e){
             return null;
