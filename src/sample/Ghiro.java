@@ -97,10 +97,8 @@ public class Ghiro {
             throws IOException, URISyntaxException {
 
         setBaseURI("http://127.0.0.1:8000/api/");
-        Console.out(Logger.INFO, "BASE_URI: " + getBaseURI());
 
         setAPIKey();
-        Console.out(Logger.INFO, "API_KEY: " + API_KEY);
 
         String response = null;
 
@@ -113,8 +111,6 @@ public class Ghiro {
                 response = getImageAnalysis("2");
             } break;
         }
-
-        Console.out(Logger.INFO, "Response: " + response);
         return response;
     }
 
@@ -166,7 +162,7 @@ public class Ghiro {
             Thread.sleep(10000);                 // 1000 milliseconds is one second.
         } catch(InterruptedException e) {
             Thread.currentThread().interrupt();
-            Console.out(Logger.WARNING, e.getMessage());
+            Console.out(Logger.ERROR, e.getMessage());
         }
 
         String analysis;
@@ -245,10 +241,8 @@ public class Ghiro {
 
         @SuppressWarnings({"StringConcatenationMissingWhitespace", "SpellCheckingInspection"})
         final String COPY_MOVE_SCRIPT = SCRIPTS_DIR + "copymove.py";
-        Console.out(Logger.INFO, "COPY_MOVE_SCRIPT: " + COPY_MOVE_SCRIPT);
 
         String cmdString = "python " + COPY_MOVE_SCRIPT + " " + imagePath;
-        Console.out(Logger.INFO, "cmdString (" + System.currentTimeMillis() + "): "  + cmdString);
 
         Process process;
         StringBuilder output = new StringBuilder();
@@ -266,8 +260,6 @@ public class Ghiro {
         } catch (IOException | InterruptedException e) {
             Console.out(Logger.ERROR, e.getMessage());
         }
-
-        Console.out(Logger.INFO, output.toString());
 
     }
 
