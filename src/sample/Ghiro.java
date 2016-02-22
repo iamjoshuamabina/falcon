@@ -106,11 +106,8 @@ public class Ghiro {
             case NEW_ANALYSIS: {
                 response = addAnalysis(ghiroBundleList);
             } break;
+		}
 
-            case SHOW_ANALYSIS: {
-                response = getImageAnalysis("2");
-            } break;
-        }
         return response;
     }
 
