@@ -409,64 +409,68 @@ public class Main extends Application implements MapComponentInitializedListener
 
         try {
             JSONObject metadataJsonObject = new JSONObject(analysisResultJsonString).getJSONObject("metadata");
-            JSONObject iptcJsonObject = metadataJsonObject.getJSONObject("Iptc");
+			if(metadataJsonObject.has("Iptc")) {
+				JSONObject iptcJsonObject = metadataJsonObject.getJSONObject("Iptc");
 
-            int tempLastRowIndex = 0;
-            JSONArray iptcJsonArray = iptcJsonObject.names();
+				int tempLastRowIndex = 0;
+				JSONArray iptcJsonArray = iptcJsonObject.names();
 
-            for(int i = 0; i < iptcJsonArray.length(); i++) {
-                String name = iptcJsonArray.getString(i);
-                JSONObject tempJsonObject = iptcJsonObject.getJSONObject(name);
+				for(int i = 0; i < iptcJsonArray.length(); i++) {
+					String name = iptcJsonArray.getString(i);
+					JSONObject tempJsonObject = iptcJsonObject.getJSONObject(name);
 
-                JSONArray tempJsonArray = tempJsonObject.names();
-                for(int j = 0; j < tempJsonArray.length(); j++){
-                    Label tempIptcDataKeyLabel = new Label();
-                    tempIptcDataKeyLabel.setId("value_key_IPTC");
+					JSONArray tempJsonArray = tempJsonObject.names();
+					for(int j = 0; j < tempJsonArray.length(); j++){
+						Label tempIptcDataKeyLabel = new Label();
+						tempIptcDataKeyLabel.setId("value_key_IPTC");
 
-                    Label tempIptcDataValueLabel = new Label();
-                    tempIptcDataValueLabel.setId("value_data_IPTC");
-                    tempIptcDataValueLabel.setTextFill(Color.web(colors[i]));
+						Label tempIptcDataValueLabel = new Label();
+						tempIptcDataValueLabel.setId("value_data_IPTC");
+						tempIptcDataValueLabel.setTextFill(Color.web(colors[i]));
 
-                    String tempIptcDataKeyString = tempJsonArray.getString(j);
-                    tempIptcDataKeyLabel.setTextFill(Color.web(colors[i]));
-                    tempIptcDataKeyLabel.setText(tempIptcDataKeyString);
+						String tempIptcDataKeyString = tempJsonArray.getString(j);
+						tempIptcDataKeyLabel.setTextFill(Color.web(colors[i]));
+						tempIptcDataKeyLabel.setText(tempIptcDataKeyString);
 
-                    String tempIptcDataValueString =":" +" " + tempJsonObject.getString(tempIptcDataKeyString);
-                    tempIptcDataValueLabel.setText(tempIptcDataValueString);
+						String tempIptcDataValueString =":" +" " + tempJsonObject.getString(tempIptcDataKeyString);
+						tempIptcDataValueLabel.setText(tempIptcDataValueString);
 
-                    HBox tempHBox = new HBox();
-                    tempHBox.getChildren().addAll(tempIptcDataKeyLabel, tempIptcDataValueLabel);
-                    iptcGridPane.add(tempHBox, 15, tempLastRowIndex, 20, 1);
+						HBox tempHBox = new HBox();
+						tempHBox.getChildren().addAll(tempIptcDataKeyLabel, tempIptcDataValueLabel);
+						iptcGridPane.add(tempHBox, 15, tempLastRowIndex, 20, 1);
 
-                    if(j == tempJsonArray.length()){
-                        tempLastRowIndex = j;
-                    } else {
-                        tempLastRowIndex++;
-                    }
-                }
+						if(j == tempJsonArray.length()){
+							tempLastRowIndex = j;
+						} else {
+							tempLastRowIndex++;
+						}
+					}
 
-                if(name.equalsIgnoreCase("Application2")) {
-                    iptcGridPane.add(new Label(name.toUpperCase()), 0, tempLastRowIndex - 3, 5, 1);
-                } else if(name.equalsIgnoreCase("Envelope")){
-                    iptcGridPane.add(new Label(name.toUpperCase()), 0, tempLastRowIndex - 1, 5, 1);
-                } else {
-                    iptcGridPane.add(new Label(name.toUpperCase()), 0, tempLastRowIndex - 2, 5, 1);
-                }
-            }
+					if(name.equalsIgnoreCase("Application2")) {
+						iptcGridPane.add(new Label(name.toUpperCase()), 0, tempLastRowIndex - 3, 5, 1);
+					} else if(name.equalsIgnoreCase("Envelope")){
+						iptcGridPane.add(new Label(name.toUpperCase()), 0, tempLastRowIndex - 1, 5, 1);
+					} else {
+						iptcGridPane.add(new Label(name.toUpperCase()), 0, tempLastRowIndex - 2, 5, 1);
+					}
+				}
 
-            VBox mainVBox = new VBox();
-            mainVBox.setStyle("-fx-background-color:white;");
-            mainVBox.getChildren().add(iptcGridPane);
-            mainVBox.setFillWidth(true);
+				VBox mainVBox = new VBox();
+				mainVBox.setStyle("-fx-background-color:white;");
+				mainVBox.getChildren().add(iptcGridPane);
+				mainVBox.setFillWidth(true);
 
-            ScrollPane iptcDataScrollPane = new ScrollPane();
-            iptcDataScrollPane.setStyle("-fx-background-color:white;");
-            iptcDataScrollPane.setFitToHeight(true);
-            iptcDataScrollPane.setFitToWidth(true);
-            iptcDataScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-            iptcDataScrollPane.setContent(mainVBox);
+				ScrollPane iptcDataScrollPane = new ScrollPane();
+				iptcDataScrollPane.setStyle("-fx-background-color:white;");
+				iptcDataScrollPane.setFitToHeight(true);
+				iptcDataScrollPane.setFitToWidth(true);
+				iptcDataScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+				iptcDataScrollPane.setContent(mainVBox);
 
-            return iptcDataScrollPane;
+				return iptcDataScrollPane;
+			} else {
+				return null;
+			}
 
         } catch(Exception e){
             return null;
