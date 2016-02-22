@@ -155,9 +155,15 @@ public class Main extends Application implements MapComponentInitializedListener
     }
 
     private ScrollPane displayCopyMoveScrollPane() {
-        String analyzedImagePath = new File(
-                Ghiro.getAnalysisDirectory() + "/"+ imageName.split("\\.")[0] +"_analyzed.jpg"
-        ).toURI().toString();
+		File analyzedImageFile = new File(
+				Ghiro.getAnalysisDirectory() + "/"+ imageName.split("\\.")[0] +"_analyzed.jpg"
+		);
+
+		if(!analyzedImageFile.exists()) {
+			return null;
+		}
+
+        String analyzedImagePath = analyzedImageFile.toURI().toString();
 
         ImageView analyzedImageView = new ImageView(new Image(analyzedImagePath));
         analyzedImageView.setStyle("-fx-padding: 2px");
@@ -563,7 +569,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			borderPane.setCenter(mGoogleMapView);
 			borderPane.setStyle("-fx-background-color:whitesmoke;");
 			return borderPane;
-			
+
 		} catch(Exception e){
 			Console.out(Logger.ERROR, e.getMessage());
 			return null;
@@ -849,44 +855,43 @@ public class Main extends Application implements MapComponentInitializedListener
 							analysisResultTabPane.getTabs().add(staticDataTab);
 						}
 
-						Tab exitDataTab = new Tab("EXIF Metadata");
 						if (displayExifDataScrollPane() != null) {
-							exitDataTab.setContent(displayExifDataScrollPane());
-							analysisResultTabPane.getTabs().add(exitDataTab);
+							Tab exifDataTab = new Tab("EXIF Metadata");
+							exifDataTab.setContent(displayExifDataScrollPane());
+							analysisResultTabPane.getTabs().add(exifDataTab);
 						}
 
-						Tab iptcDataTab = new Tab("IPTC Analysis Data");
 						if (displayIptcDataScrollPane() != null) {
+							Tab iptcDataTab = new Tab("IPTC Analysis Data");
 							iptcDataTab.setContent(displayIptcDataScrollPane());
 							analysisResultTabPane.getTabs().add(iptcDataTab);
 						}
 
-						Tab xmpDataTab = new Tab("XMP Analysis Data");
 						if (displayXmpDataScrollPane() != null) {
+							Tab xmpDataTab = new Tab("XMP Analysis Data");
 							xmpDataTab.setContent(displayXmpDataScrollPane());
 							analysisResultTabPane.getTabs().add(xmpDataTab);
 						}
 
-						Tab geolocationDataTab = new Tab("Geolocation Analysis Data");
 						if (displayGpsDataBorderPane() != null) {
+							Tab geolocationDataTab = new Tab("Geolocation Analysis Data");
 							geolocationDataTab.setContent(displayGpsDataBorderPane());
 							analysisResultTabPane.getTabs().add(geolocationDataTab);
 						}
 
-
-						Tab signatureDataTab = new Tab("Signature Analysis Data");
 						if (displaySignatureScrollPane() != null) {
+							Tab signatureDataTab = new Tab("Signature Analysis Data");
 							signatureDataTab.setContent(displaySignatureScrollPane());
 							analysisResultTabPane.getTabs().add(signatureDataTab);
 						}
 
-						Tab copymoveDataTab = new Tab("Copymove Analysis Data");
 						if (displayCopyMoveScrollPane() != null) {
+							Tab copymoveDataTab = new Tab("Copymove Analysis Data");
 							copymoveDataTab.setContent(displayCopyMoveScrollPane());
 							analysisResultTabPane.getTabs().add(copymoveDataTab);
 						}
-						Tab errorLevelAnalysisDataTab = new Tab("Error Level Analysis Data");
 						if (displayElaDataBorderPane() != null) {
+							Tab errorLevelAnalysisDataTab = new Tab("Error Level Analysis Data");
 							errorLevelAnalysisDataTab.setContent(displayElaDataBorderPane());
 							analysisResultTabPane.getTabs().add(errorLevelAnalysisDataTab);
 						}
