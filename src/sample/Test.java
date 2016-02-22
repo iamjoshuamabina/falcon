@@ -28,6 +28,11 @@ public class Test {
 			JSONObject metadataJsonObject = new JSONObject(resultJsonString).getJSONObject("metadata");
 			Console.out("Metadata: " + metadataJsonObject.toString());
 
+			JSONObject gpsJsonObject = metadataJsonObject.getJSONObject("gps");
+			Console.out("GPS: " + gpsJsonObject.toString());
+
+
+
 		} catch (IOException | URISyntaxException e) {
 			Console.out(Logger.ERROR, e.getMessage());
 		}
