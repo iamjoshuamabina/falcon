@@ -72,6 +72,7 @@ public class Main extends Application implements MapComponentInitializedListener
     private ImageView selectedImageFileImageView = new ImageView(new Image("images/thumb_400x300.png"));
 
     private GoogleMapView mGoogleMapView;
+	private double googleMapViewLatitude, googleMapViewLongitude;
 
     public Main() {
         mainSplitPane = new SplitPane();
@@ -126,12 +127,10 @@ public class Main extends Application implements MapComponentInitializedListener
     @Override
     public final void mapInitialized() {
 		GoogleMap mGoogleMap;
-		final double latitude = -6.17306;
-		final double longitude = 35.7419;
 
 		try {
 			MapOptions mapOptions = new MapOptions();
-			mapOptions.center(new LatLong(latitude, longitude))
+			mapOptions.center(new LatLong(googleMapViewLatitude, googleMapViewLongitude))
                     .mapType(MapTypeIdEnum.ROADMAP)
                     .overviewMapControl(false)
                     .panControl(false)
@@ -144,7 +143,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			mGoogleMap = mGoogleMapView.createMap(mapOptions);
 
 			MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(new LatLong(latitude, longitude))
+            markerOptions.position(new LatLong(googleMapViewLatitude, googleMapViewLongitude))
                     .visible(Boolean.TRUE)
                     .title("Photo Taken");
             Marker marker = new Marker( markerOptions );
@@ -549,6 +548,14 @@ public class Main extends Application implements MapComponentInitializedListener
 
 	private BorderPane displayGpsDataBorderPane() {
 		try {
+
+			JSONObject metadataJsonObject = new JSONObject(analysisResultJsonString).getJSONObject("metadata");
+			JSONObject gpsDataJsonObject = metadataJsonObject.getJSONObject("gps");
+			JSONObject posGpsDataJsonObject = gpsDataJsonObject.getJSONObject("pos");
+
+			googleMapViewLatitude = Double.parseDouble(String.valueOf(posGpsDataJsonObject.get("Latitude")));
+			googleMapViewLongitude = Double.parseDouble(String.valueOf(posGpsDataJsonObject.get("Longitude")));
+
 			mGoogleMapView = new GoogleMapView();
 			mGoogleMapView.addMapInializedListener(this);
 			BorderPane borderPane = new BorderPane();
@@ -556,6 +563,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			borderPane.setCenter(mGoogleMapView);
 			borderPane.setStyle("-fx-background-color:whitesmoke;");
 			return borderPane;
+			
 		} catch(Exception e){
 			Console.out(Logger.ERROR, e.getMessage());
 			return null;
