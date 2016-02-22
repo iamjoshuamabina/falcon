@@ -251,7 +251,6 @@ public class Main extends Application implements MapComponentInitializedListener
 		staticDataGridPane.setHgap(5);
 
 		try{
-			Tab staticInfoTab = new Tab("Static Information");
 			Tab fileTypeTab = new Tab("File Type");
 			Tab hashInfoTab = new Tab("Hash Information");
 
@@ -312,7 +311,7 @@ public class Main extends Application implements MapComponentInitializedListener
 
 			TabPane staticDataTabPane = new TabPane();
 			staticDataTabPane.setStyle("-fx-background-color:white;");
-			staticDataTabPane.getTabs().addAll(staticInfoTab, fileTypeTab, hashInfoTab);
+			staticDataTabPane.getTabs().addAll(fileTypeTab, hashInfoTab);
 
 			ScrollPane staticDataScrollPane = new ScrollPane();
 			staticDataScrollPane.setStyle("-fx-background-color:white;");
