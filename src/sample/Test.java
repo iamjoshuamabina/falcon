@@ -1,5 +1,6 @@
 package sample;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import sample.util.Console;
 import sample.util.Logger;
@@ -28,10 +29,11 @@ public class Test {
 			JSONObject metadataJsonObject = new JSONObject(resultJsonString).getJSONObject("metadata");
 			Console.out("Metadata: " + metadataJsonObject.toString());
 
-			JSONObject gpsJsonObject = metadataJsonObject.getJSONObject("gps");
-			Console.out("GPS: " + gpsJsonObject.toString());
+			JSONObject gpsDataJsonObject = metadataJsonObject.getJSONObject("gps");
+			Console.out("GPS: " + gpsDataJsonObject.toString());
 
-
+			JSONArray gpsDataJsonArray = gpsDataJsonObject.names();
+			Console.out("GPS Data: " + gpsDataJsonArray.toString());
 
 		} catch (IOException | URISyntaxException e) {
 			Console.out(Logger.ERROR, e.getMessage());
