@@ -1,6 +1,5 @@
 package sample;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import sample.util.Console;
 import sample.util.Logger;
@@ -14,7 +13,7 @@ public class Test {
 	public Test() {
 	}
 
-	public static String canGetGpsData() {
+	public static String testCanGetGpsData() {
 		String resultJsonString;
 		Ghiro.GhiroBundle ghiroBundle;
 
@@ -32,8 +31,12 @@ public class Test {
 			JSONObject gpsDataJsonObject = metadataJsonObject.getJSONObject("gps");
 			Console.out("GPS: " + gpsDataJsonObject.toString());
 
-			JSONArray gpsDataJsonArray = gpsDataJsonObject.names();
-			Console.out("GPS Data: " + gpsDataJsonArray.toString());
+			JSONObject posGpsDataJsonObject = gpsDataJsonObject.getJSONObject("pos");
+			Console.out("GPS Position: " + posGpsDataJsonObject.toString());
+
+			Console.out("GPS Altitude: " + String.valueOf(gpsDataJsonObject.get("Altitude")));
+			Console.out("GPS Latitude: " + String.valueOf(posGpsDataJsonObject.get("Latitude")));
+			Console.out("GPS Longitude: " + String.valueOf(posGpsDataJsonObject.get("Longitude")));
 
 		} catch (IOException | URISyntaxException e) {
 			Console.out(Logger.ERROR, e.getMessage());
@@ -45,6 +48,6 @@ public class Test {
 
 	public static void main(String[] args) {
 		Console.out("Falcon Test");
-		Test.canGetGpsData();
+		Test.testCanGetGpsData();
 	}
 }
