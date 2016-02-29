@@ -163,7 +163,7 @@ public class Main extends Application implements MapComponentInitializedListener
 
     private ScrollPane displayCopyMoveScrollPane() {
 		File analyzedImageFile = new File(
-				Ghiro.getAnalysisDirectory() + "/"+ imageName.split("\\.")[0] +"_analyzed.jpg"
+				Hedwig.getAnalysisDirectory() + "/"+ imageName.split("\\.")[0] +"_analyzed.jpg"
 		);
 
 		if(!analyzedImageFile.exists()) {
@@ -617,7 +617,7 @@ public class Main extends Application implements MapComponentInitializedListener
                 String elaValueString = elaJsonObject.getString(elaKeyString);
                 //noinspection StringConcatenationMissingWhitespace
                 String elaImagePath
-                        = Ghiro.getBaseURI() + "analyses/images/file/" + elaValueString + "/";
+                        = Hedwig.getBaseURI() + "analyses/images/file/" + elaValueString + "/";
 
                 Image elaImageFile = new Image(elaImagePath);
                 ImageView elaImageFileImageView = new ImageView(elaImageFile);
@@ -868,19 +868,19 @@ public class Main extends Application implements MapComponentInitializedListener
 
 				if(canUseExperimentalFeatures) {
 					try {
-						Ghiro.getCopyMoveAnalysisData(imagePath);
+						Hedwig.getCopyMoveAnalysisData(imagePath);
 					} catch (IOException ex) {
 						Console.out(Logger.ERROR, ex.getMessage());
 					}
 				}
 
-				ArrayList<Ghiro.GhiroBundle> ghiroBundleList = new ArrayList<>();
-				ghiroBundleList.add(new Ghiro.GhiroBundle("name", caseTitleTextField.getText()));
-				ghiroBundleList.add(new Ghiro.GhiroBundle("description", caseDescriptionField.getText()));
-				ghiroBundleList.add(new Ghiro.GhiroBundle("image", imagePath));
+				ArrayList<Hedwig.GhiroBundle> ghiroBundleList = new ArrayList<>();
+				ghiroBundleList.add(new Hedwig.GhiroBundle("name", caseTitleTextField.getText()));
+				ghiroBundleList.add(new Hedwig.GhiroBundle("description", caseDescriptionField.getText()));
+				ghiroBundleList.add(new Hedwig.GhiroBundle("image", imagePath));
 
 				try {
-					analysisResultJsonString = Ghiro.analyse(Ghiro.Route.NEW_ANALYSIS, ghiroBundleList);
+					analysisResultJsonString = Hedwig.analyse(Hedwig.Route.NEW_ANALYSIS, ghiroBundleList);
 					displaySplitPane(null);
 
 					if (analysisResultJsonString.isEmpty()) {

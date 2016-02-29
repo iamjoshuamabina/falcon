@@ -23,7 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
-public class Ghiro {
+public class Hedwig {
     private static URI BASE_URI;
     private static URI REMOTE_NAME;
     private static String API_KEY;
@@ -52,7 +52,7 @@ public class Ghiro {
         SHOW_ANALYSIS,
     }
 
-    public Ghiro() {
+    public Hedwig() {
     }
 
     public static void setBaseURI(String str) {
@@ -61,7 +61,7 @@ public class Ghiro {
 
     @SuppressWarnings("SuspiciousGetterSetter")
     public static URI getBaseURI() {
-        return Ghiro.BASE_URI;
+        return Hedwig.BASE_URI;
     }
 
     @SuppressWarnings("SuspiciousGetterSetter")
