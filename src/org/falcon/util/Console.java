@@ -1,19 +1,18 @@
-package sample.util;
+package org.falcon.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class Console {
 
-    public Console() {
-    }
+    private Console() {}
 
-    public static void out(Logger level, String message) {
-        Logger.log(level, message);
+    public static void out(LogUtils level, String message) {
+        LogUtils.log(level, message);
     }
 
     public static void out(String message) {
-        Logger.log(Logger.INFO, message);
+        LogUtils.log(LogUtils.INFO, message);
     }
 
     public static String in(String promptString) {
@@ -27,7 +26,7 @@ public class Console {
         try {
             return stdin.readLine().trim();
         } catch (Exception e) {
-            Console.out(Logger.ERROR, "Console.in() -> " + e.getMessage());
+            Console.out(LogUtils.ERROR, "Console.in() -> " + e.getMessage());
         }
         return null;
     }

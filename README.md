@@ -1,6 +1,6 @@
 <pre align="center">
 	
-Image, Audio*, and Video* Forensics Software
+Falcon is an automated Image, Audio*, and Video* Forensics Software
 
 A project by students and their facilitating instructors
 at the College of Informatics, University of Dodoma, Tanzania.

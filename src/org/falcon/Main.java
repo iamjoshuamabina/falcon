@@ -1,4 +1,4 @@
-package sample;
+package org.falcon;
 
 import com.lynden.gmapsfx.GoogleMapView;
 import com.lynden.gmapsfx.MapComponentInitializedListener;
@@ -9,9 +9,9 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.*;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -25,16 +25,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.falcon.util.Console;
+import org.falcon.util.LogUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import sample.util.Console;
-import sample.util.Logger;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Main extends Application implements MapComponentInitializedListener {
@@ -51,7 +50,7 @@ public class Main extends Application implements MapComponentInitializedListener
     };
 
     private TabPane analysisResultTabPane;
-    private String analysisResultJsonString;
+    private String analysisResultJsonString = "";
 
     private SplitPane mainSplitPane;
 
@@ -157,13 +156,13 @@ public class Main extends Application implements MapComponentInitializedListener
             mGoogleMap.addMarker(marker);
 
         } catch(Exception e){
-            Console.out(Logger.ERROR, "mapInitialized() -> " + e.getMessage());
+            Console.out(LogUtils.ERROR, "mapInitialized() -> " + e.getMessage());
         }
     }
 
     private ScrollPane displayCopyMoveScrollPane() {
 		File analyzedImageFile = new File(
-				Hedwig.getAnalysisDirectory() + "/"+ imageName.split("\\.")[0] +"_analyzed.jpg"
+				Config.getAnalysisDir() + "/"+ imageName.split("\\.")[0] +"_analyzed.jpg"
 		);
 
 		if(!analyzedImageFile.exists()) {
@@ -245,7 +244,7 @@ public class Main extends Application implements MapComponentInitializedListener
             return signatureDataScrollPane;
 
         } catch(Exception e){
-            Console.out(Logger.ERROR, e.getMessage());
+            Console.out(LogUtils.ERROR, e.getMessage());
             return null;
         }
     }
@@ -327,7 +326,7 @@ public class Main extends Application implements MapComponentInitializedListener
 
 			return staticDataScrollPane;
 		} catch(Exception e){
-			Console.out(Logger.ERROR, e.getMessage());
+			Console.out(LogUtils.ERROR, e.getMessage());
 			return null;
 		}
 	}
@@ -409,7 +408,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			}
 
         } catch(Exception e) {
-            Console.out(Logger.ERROR, e.getMessage());
+            Console.out(LogUtils.ERROR, e.getMessage());
             return null;
         }
 
@@ -599,7 +598,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			}
 
 		} catch(Exception e){
-			Console.out(Logger.ERROR, e.getMessage());
+			Console.out(LogUtils.ERROR, e.getMessage());
 			return null;
 		}
 	}
@@ -617,7 +616,7 @@ public class Main extends Application implements MapComponentInitializedListener
                 String elaValueString = elaJsonObject.getString(elaKeyString);
                 //noinspection StringConcatenationMissingWhitespace
                 String elaImagePath
-                        = Hedwig.getBaseURI() + "analyses/images/file/" + elaValueString + "/";
+                        = Config.getBaseURI() + "analyses/images/file/" + elaValueString + "/";
 
                 Image elaImageFile = new Image(elaImagePath);
                 ImageView elaImageFileImageView = new ImageView(elaImageFile);
@@ -813,7 +812,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			return dashBoardDataScrollPane;
 
 		} catch(Exception e) {
-			Console.out(Logger.ERROR, e.getMessage());
+			Console.out(LogUtils.ERROR, e.getMessage());
 			return null;
 		}
 	}
@@ -867,82 +866,67 @@ public class Main extends Application implements MapComponentInitializedListener
 			if (event.getButton() == MouseButton.PRIMARY) {
 
 				if(canUseExperimentalFeatures) {
-					try {
-						Hedwig.getCopyMoveAnalysisData(imagePath);
-					} catch (IOException ex) {
-						Console.out(Logger.ERROR, ex.getMessage());
-					}
+					Console.out("Using experimental features");
 				}
 
-				ArrayList<Hedwig.GhiroBundle> ghiroBundleList = new ArrayList<>();
-				ghiroBundleList.add(new Hedwig.GhiroBundle("name", caseTitleTextField.getText()));
-				ghiroBundleList.add(new Hedwig.GhiroBundle("description", caseDescriptionField.getText()));
-				ghiroBundleList.add(new Hedwig.GhiroBundle("image", imagePath));
+				displaySplitPane(null);
 
-				try {
-					analysisResultJsonString = Hedwig.analyse(Hedwig.Route.NEW_ANALYSIS, ghiroBundleList);
-					displaySplitPane(null);
-
-					if (analysisResultJsonString.isEmpty()) {
-						Console.out(Logger.WARNING, "No analysis was returned.");
-					} else {
-						Tab dashboardTab = new Tab("Analysis Summary");
-						if (displayDashBoardScrollPane() != null) {
-							dashboardTab.setContent(displayDashBoardScrollPane());
-							analysisResultTabPane.getTabs().add(dashboardTab);
-						}
-
-						Tab staticDataTab = new Tab("Static Analysis Data");
-						if (displayStaticDataScrollPane() != null) {
-							staticDataTab.setContent(displayStaticDataScrollPane());
-							analysisResultTabPane.getTabs().add(staticDataTab);
-						}
-
-						if (displayExifDataScrollPane() != null) {
-							Tab exifDataTab = new Tab("EXIF Metadata");
-							exifDataTab.setContent(displayExifDataScrollPane());
-							analysisResultTabPane.getTabs().add(exifDataTab);
-						}
-
-						if (displayIptcDataScrollPane() != null) {
-							Tab iptcDataTab = new Tab("IPTC Analysis Data");
-							iptcDataTab.setContent(displayIptcDataScrollPane());
-							analysisResultTabPane.getTabs().add(iptcDataTab);
-						}
-
-						if (displayXmpDataScrollPane() != null) {
-							Tab xmpDataTab = new Tab("XMP Analysis Data");
-							xmpDataTab.setContent(displayXmpDataScrollPane());
-							analysisResultTabPane.getTabs().add(xmpDataTab);
-						}
-
-						if (displayGpsDataBorderPane() != null) {
-							Tab geolocationDataTab = new Tab("Geolocation Analysis Data");
-							geolocationDataTab.setContent(displayGpsDataBorderPane());
-							analysisResultTabPane.getTabs().add(geolocationDataTab);
-						}
-
-						if (displaySignatureScrollPane() != null) {
-							Tab signatureDataTab = new Tab("Signature Analysis Data");
-							signatureDataTab.setContent(displaySignatureScrollPane());
-							analysisResultTabPane.getTabs().add(signatureDataTab);
-						}
-
-						if (displayCopyMoveScrollPane() != null) {
-							Tab copymoveDataTab = new Tab("Copymove Analysis Data");
-							copymoveDataTab.setContent(displayCopyMoveScrollPane());
-							analysisResultTabPane.getTabs().add(copymoveDataTab);
-						}
-
-						if (displayElaDataBorderPane() != null) {
-							Tab errorLevelAnalysisDataTab = new Tab("Error Level Analysis Data");
-							errorLevelAnalysisDataTab.setContent(displayElaDataBorderPane());
-							analysisResultTabPane.getTabs().add(errorLevelAnalysisDataTab);
-						}
+				if (analysisResultJsonString.isEmpty()) {
+					Console.out(LogUtils.WARNING, "No analysis was returned.");
+				} else {
+					Tab dashboardTab = new Tab("Analysis Summary");
+					if (displayDashBoardScrollPane() != null) {
+						dashboardTab.setContent(displayDashBoardScrollPane());
+						analysisResultTabPane.getTabs().add(dashboardTab);
 					}
 
-				} catch (IOException | URISyntaxException ex) {
-					Console.out(Logger.ERROR, ex.getMessage());
+					Tab staticDataTab = new Tab("Static Analysis Data");
+					if (displayStaticDataScrollPane() != null) {
+						staticDataTab.setContent(displayStaticDataScrollPane());
+						analysisResultTabPane.getTabs().add(staticDataTab);
+					}
+
+					if (displayExifDataScrollPane() != null) {
+						Tab exifDataTab = new Tab("EXIF Metadata");
+						exifDataTab.setContent(displayExifDataScrollPane());
+						analysisResultTabPane.getTabs().add(exifDataTab);
+					}
+
+					if (displayIptcDataScrollPane() != null) {
+						Tab iptcDataTab = new Tab("IPTC Analysis Data");
+						iptcDataTab.setContent(displayIptcDataScrollPane());
+						analysisResultTabPane.getTabs().add(iptcDataTab);
+					}
+
+					if (displayXmpDataScrollPane() != null) {
+						Tab xmpDataTab = new Tab("XMP Analysis Data");
+						xmpDataTab.setContent(displayXmpDataScrollPane());
+						analysisResultTabPane.getTabs().add(xmpDataTab);
+					}
+
+					if (displayGpsDataBorderPane() != null) {
+						Tab geolocationDataTab = new Tab("Geolocation Analysis Data");
+						geolocationDataTab.setContent(displayGpsDataBorderPane());
+						analysisResultTabPane.getTabs().add(geolocationDataTab);
+					}
+
+					if (displaySignatureScrollPane() != null) {
+						Tab signatureDataTab = new Tab("Signature Analysis Data");
+						signatureDataTab.setContent(displaySignatureScrollPane());
+						analysisResultTabPane.getTabs().add(signatureDataTab);
+					}
+
+					if (displayCopyMoveScrollPane() != null) {
+						Tab copymoveDataTab = new Tab("Copymove Analysis Data");
+						copymoveDataTab.setContent(displayCopyMoveScrollPane());
+						analysisResultTabPane.getTabs().add(copymoveDataTab);
+					}
+
+					if (displayElaDataBorderPane() != null) {
+						Tab errorLevelAnalysisDataTab = new Tab("Error Level Analysis Data");
+						errorLevelAnalysisDataTab.setContent(displayElaDataBorderPane());
+						analysisResultTabPane.getTabs().add(errorLevelAnalysisDataTab);
+					}
 				}
 			}
 

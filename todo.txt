@@ -1,5 +1,0 @@
-Image, Audio, and Video Forensics Software
-
-- Store all config values i.e. BASE_URL, ACTIVE_PORT, API_KEY
-- Add copymove summary data onto summary tab
-- Start Ghiro services as needed
