@@ -26,7 +26,6 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.falcon.util.ConsoleUtils;
-import org.falcon.util.LogUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,7 +35,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 
+import static org.falcon.util.LogUtils.*;
+
 public class Main extends Application implements MapComponentInitializedListener {
+
+	private static final String TAG = makeLogTag(Main.class);
+
 	private long imageSize;
 	private String imageName, imagePath;
 	private boolean canUseExperimentalFeatures = false;
@@ -156,13 +160,13 @@ public class Main extends Application implements MapComponentInitializedListener
             mGoogleMap.addMarker(marker);
 
         } catch(Exception e){
-            ConsoleUtils.out(LogUtils.ERROR, "mapInitialized() -> " + e.getMessage());
+			LOGE(TAG, e.getMessage());
         }
     }
 
     private ScrollPane displayCopyMoveScrollPane() {
 		File analyzedImageFile = new File(
-				Config.getAnalysisDir() + "/"+ imageName.split("\\.")[0] +"_analyzed.jpg"
+				Config.ANALYSIS_DIR + "/"+ imageName.split("\\.")[0] +"_analyzed.jpg"
 		);
 
 		if(!analyzedImageFile.exists()) {
@@ -244,7 +248,7 @@ public class Main extends Application implements MapComponentInitializedListener
             return signatureDataScrollPane;
 
         } catch(Exception e){
-            ConsoleUtils.out(LogUtils.ERROR, e.getMessage());
+			LOGE(TAG, e.getMessage());
             return null;
         }
     }
@@ -326,7 +330,7 @@ public class Main extends Application implements MapComponentInitializedListener
 
 			return staticDataScrollPane;
 		} catch(Exception e){
-			ConsoleUtils.out(LogUtils.ERROR, e.getMessage());
+			LOGE(TAG, e.getMessage());
 			return null;
 		}
 	}
@@ -408,7 +412,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			}
 
         } catch(Exception e) {
-            ConsoleUtils.out(LogUtils.ERROR, e.getMessage());
+			LOGE(TAG, e.getMessage());
             return null;
         }
 
@@ -598,7 +602,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			}
 
 		} catch(Exception e){
-			ConsoleUtils.out(LogUtils.ERROR, e.getMessage());
+			LOGE(TAG, e.getMessage());
 			return null;
 		}
 	}
@@ -616,7 +620,7 @@ public class Main extends Application implements MapComponentInitializedListener
                 String elaValueString = elaJsonObject.getString(elaKeyString);
                 //noinspection StringConcatenationMissingWhitespace
                 String elaImagePath
-                        = Config.getBaseURI() + "analyses/images/file/" + elaValueString + "/";
+                        = Config.ANALYSIS_DIR + elaValueString + "/";
 
                 Image elaImageFile = new Image(elaImagePath);
                 ImageView elaImageFileImageView = new ImageView(elaImageFile);
@@ -812,7 +816,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			return dashBoardDataScrollPane;
 
 		} catch(Exception e) {
-			ConsoleUtils.out(LogUtils.ERROR, e.getMessage());
+			LOGE(TAG, e.getMessage());
 			return null;
 		}
 	}
@@ -872,7 +876,7 @@ public class Main extends Application implements MapComponentInitializedListener
 				displaySplitPane(null);
 
 				if (analysisResultJsonString.isEmpty()) {
-					ConsoleUtils.out(LogUtils.WARNING, "No analysis was returned.");
+					LOGW(TAG, "No analysis report to show");
 				} else {
 					Tab dashboardTab = new Tab("Analysis Summary");
 					if (displayDashBoardScrollPane() != null) {
