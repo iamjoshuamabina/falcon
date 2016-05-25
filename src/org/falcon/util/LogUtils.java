@@ -36,23 +36,25 @@ public class LogUtils {
         this.value = i;
     }
 
-    public static String setup(LogUtils mLogUtils) {
-        return Console.color(mLogUtils.value) + mLogUtils.name;
+    public static String setUp(LogUtils logUtils) {
+        return ConsoleUtils.color(logUtils.value);
     }
 
-    public static String setup(LogUtils mLogUtils, boolean b) {
-        if(b) return Console.color(mLogUtils.value);
+    public static String setUp(LogUtils logUtils, boolean b) {
+        if(b) {
+			return ConsoleUtils.color(logUtils.value);
+		}
         //noinspection ReturnOfNull
         return null;
     }
 
     public static void log(LogUtils level) {
-        if(debugger) System.out.println(LogUtils.setup(level, true));
+        if(debugger) System.out.println(LogUtils.setUp(level, true));
     }
 
     public static void log(LogUtils level, String message) {
         if(debugger) {
-            System.out.println(LogUtils.setup(level) + " - " + message);
+            System.out.println(LogUtils.setUp(level) + message);
             LogUtils.log(LogUtils.NORMAL);
         }
     }

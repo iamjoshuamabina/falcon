@@ -3,9 +3,9 @@ package org.falcon.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class Console {
+public class ConsoleUtils {
 
-    private Console() {}
+    private ConsoleUtils() {}
 
     public static void out(LogUtils level, String message) {
         LogUtils.log(level, message);
@@ -26,7 +26,7 @@ public class Console {
         try {
             return stdin.readLine().trim();
         } catch (Exception e) {
-            Console.out(LogUtils.ERROR, "Console.in() -> " + e.getMessage());
+            ConsoleUtils.out(LogUtils.ERROR, "Console.in() -> " + e.getMessage());
         }
         return null;
     }

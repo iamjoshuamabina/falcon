@@ -25,7 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.falcon.util.Console;
+import org.falcon.util.ConsoleUtils;
 import org.falcon.util.LogUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -156,7 +156,7 @@ public class Main extends Application implements MapComponentInitializedListener
             mGoogleMap.addMarker(marker);
 
         } catch(Exception e){
-            Console.out(LogUtils.ERROR, "mapInitialized() -> " + e.getMessage());
+            ConsoleUtils.out(LogUtils.ERROR, "mapInitialized() -> " + e.getMessage());
         }
     }
 
@@ -244,7 +244,7 @@ public class Main extends Application implements MapComponentInitializedListener
             return signatureDataScrollPane;
 
         } catch(Exception e){
-            Console.out(LogUtils.ERROR, e.getMessage());
+            ConsoleUtils.out(LogUtils.ERROR, e.getMessage());
             return null;
         }
     }
@@ -326,7 +326,7 @@ public class Main extends Application implements MapComponentInitializedListener
 
 			return staticDataScrollPane;
 		} catch(Exception e){
-			Console.out(LogUtils.ERROR, e.getMessage());
+			ConsoleUtils.out(LogUtils.ERROR, e.getMessage());
 			return null;
 		}
 	}
@@ -408,7 +408,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			}
 
         } catch(Exception e) {
-            Console.out(LogUtils.ERROR, e.getMessage());
+            ConsoleUtils.out(LogUtils.ERROR, e.getMessage());
             return null;
         }
 
@@ -598,7 +598,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			}
 
 		} catch(Exception e){
-			Console.out(LogUtils.ERROR, e.getMessage());
+			ConsoleUtils.out(LogUtils.ERROR, e.getMessage());
 			return null;
 		}
 	}
@@ -812,7 +812,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			return dashBoardDataScrollPane;
 
 		} catch(Exception e) {
-			Console.out(LogUtils.ERROR, e.getMessage());
+			ConsoleUtils.out(LogUtils.ERROR, e.getMessage());
 			return null;
 		}
 	}
@@ -852,10 +852,10 @@ public class Main extends Application implements MapComponentInitializedListener
 		canUseExperimentalFeaturesCheckBox.setOnMouseClicked(event -> {
 			if(canUseExperimentalFeaturesCheckBox.isSelected()) {
 				canUseExperimentalFeatures = true;
-				Console.out("Falcon is using experimental features");
+				ConsoleUtils.out("Falcon is using experimental features");
 			} else {
 				canUseExperimentalFeatures = false;
-				Console.out("Falcon is not using experimental features");
+				ConsoleUtils.out("Falcon is not using experimental features");
 			}
 		});
 
@@ -866,13 +866,13 @@ public class Main extends Application implements MapComponentInitializedListener
 			if (event.getButton() == MouseButton.PRIMARY) {
 
 				if(canUseExperimentalFeatures) {
-					Console.out("Using experimental features");
+					ConsoleUtils.out("Using experimental features");
 				}
 
 				displaySplitPane(null);
 
 				if (analysisResultJsonString.isEmpty()) {
-					Console.out(LogUtils.WARNING, "No analysis was returned.");
+					ConsoleUtils.out(LogUtils.WARNING, "No analysis was returned.");
 				} else {
 					Tab dashboardTab = new Tab("Analysis Summary");
 					if (displayDashBoardScrollPane() != null) {
