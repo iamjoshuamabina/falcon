@@ -1,13 +1,17 @@
 package org.falcon.claws;
 
 import org.falcon.util.ConsoleUtils;
-import org.falcon.util.LogUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static org.falcon.util.LogUtils.LOGE;
+import static org.falcon.util.LogUtils.makeLogTag;
+
 public class Claws {
+
+	private static final String TAG = makeLogTag(Claws.class);
 
 	public static void help() {
 		String cmdString = "claws -h";
@@ -28,7 +32,7 @@ public class Claws {
 			}
 			ConsoleUtils.out(output.toString());
 		} catch (IOException | InterruptedException e) {
-			ConsoleUtils.out(LogUtils.ERROR, e.getMessage());
+			LOGE(TAG, e.getMessage());
 		}
 	}
 }
