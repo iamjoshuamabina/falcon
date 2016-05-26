@@ -25,13 +25,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.falcon.claws.Claws;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Iterator;
 
 import static org.falcon.util.LogUtils.*;
@@ -614,14 +617,17 @@ public class Main extends Application implements MapComponentInitializedListener
         while(elaKeysStringIterator.hasNext() && countNumberOfKeys != elaJsonObject.length()){
             String elaKeyString= elaKeysStringIterator.next();
 
-            if(elaKeyString.equalsIgnoreCase("ela_image")){
-                String elaValueString = elaJsonObject.getString(elaKeyString);
-                //noinspection StringConcatenationMissingWhitespace
-                String elaImagePath
-                        = Config.ANALYSIS_DIR + elaValueString + "/";
+            if(elaKeyString.equalsIgnoreCase("filename")){
+                String elaImagePath = "file://" + elaJsonObject.getString(elaKeyString);
+				LOGI(TAG, elaImagePath);
 
-                Image elaImageFile = new Image(elaImagePath);
-                ImageView elaImageFileImageView = new ImageView(elaImageFile);
+				Image elaImageFile = null;
+				try {
+					elaImageFile = new Image(String.valueOf(new URL(elaImagePath)));
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
+				ImageView elaImageFileImageView = new ImageView(elaImageFile);
 				elaImageFileImageView.setFitHeight(Double.parseDouble(FIT_HEIGHT));
 				elaImageFileImageView.setFitWidth(Double.parseDouble(FIT_WIDTH));
                 tempBorderPane.setCenter(elaImageFileImageView);
@@ -858,6 +864,7 @@ public class Main extends Application implements MapComponentInitializedListener
 			if (event.getButton() == MouseButton.PRIMARY) {
 
 				displaySplitPane(null);
+				analysisResultJsonString = Claws.analyse(imagePath);
 
 				if (analysisResultJsonString.isEmpty()) {
 					LOGW(TAG, "No analysis report to show");
