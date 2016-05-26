@@ -25,7 +25,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.falcon.util.ConsoleUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -43,7 +42,6 @@ public class Main extends Application implements MapComponentInitializedListener
 
 	private long imageSize;
 	private String imageName, imagePath;
-	private boolean canUseExperimentalFeatures = false;
 
 	private final String FIT_HEIGHT = "300";
 	private final String FIT_WIDTH = "400";
@@ -853,25 +851,11 @@ public class Main extends Application implements MapComponentInitializedListener
 		fileChooserButtonHBox.setOnMouseEntered(event -> fileChooserButtonHBox.setOpacity(0.5));
 		fileChooserButtonHBox.setOnMouseExited(event -> fileChooserButtonHBox.setOpacity(1));
 
-		canUseExperimentalFeaturesCheckBox.setOnMouseClicked(event -> {
-			if(canUseExperimentalFeaturesCheckBox.isSelected()) {
-				canUseExperimentalFeatures = true;
-				ConsoleUtils.out("Falcon is using experimental features");
-			} else {
-				canUseExperimentalFeatures = false;
-				ConsoleUtils.out("Falcon is not using experimental features");
-			}
-		});
-
 		analyzeButtonHBox.setAlignment(Pos.CENTER);
 		analyzeButtonHBox.setStyle("-fx-background-color:#3a88ad;");
 		analyzeButtonHBox.getChildren().add(analyzeImageButtonLabel);
 		analyzeButtonHBox.setOnMouseClicked(event -> {
 			if (event.getButton() == MouseButton.PRIMARY) {
-
-				if(canUseExperimentalFeatures) {
-					ConsoleUtils.out("Using experimental features");
-				}
 
 				displaySplitPane(null);
 
