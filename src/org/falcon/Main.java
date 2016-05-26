@@ -165,31 +165,35 @@ public class Main extends Application implements MapComponentInitializedListener
         }
     }
 
-    private ScrollPane displayCopyMoveScrollPane() {
-		File analyzedImageFile = new File(
-				Config.ANALYSIS_DIR + "/"+ imageName.split("\\.")[0] +"_analyzed.jpg"
-		);
+	private ScrollPane displayCopyMoveScrollPane(){
+		JSONObject copymoveJsonObject = new JSONObject(analysisResultJsonString).getJSONObject("copymove");
+		Iterator<String> elaKeysStringIterator = copymoveJsonObject.keys();
 
-		if(!analyzedImageFile.exists()) {
-			return null;
+		int countNumberOfKeys = 0;
+		ScrollPane tempScrollpane = new ScrollPane();
+		while(elaKeysStringIterator.hasNext() && countNumberOfKeys != copymoveJsonObject.length()){
+			String copymoveKeyString = elaKeysStringIterator.next();
+
+			if(copymoveKeyString.equalsIgnoreCase("filename")){
+				String copymoveImagePath = "file://" + copymoveJsonObject.getString(copymoveKeyString);
+				LOGI(TAG, copymoveImagePath);
+
+				Image copymoveImage = null;
+				try {
+					copymoveImage = new Image(String.valueOf(new URL(copymoveImagePath)));
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
+				ImageView copymoveImageView = new ImageView(copymoveImage);
+				copymoveImageView.setFitHeight(Double.parseDouble(FIT_HEIGHT));
+				copymoveImageView.setFitWidth(Double.parseDouble(FIT_WIDTH));
+				tempScrollpane.setContent(copymoveImageView);
+				return tempScrollpane;
+			}
+			countNumberOfKeys++;
 		}
-
-        String analyzedImagePath = analyzedImageFile.toURI().toString();
-
-        ImageView analyzedImageView = new ImageView(new Image(analyzedImagePath));
-		analyzedImageView.setFitHeight(Double.parseDouble(FIT_HEIGHT));
-		analyzedImageView.setFitWidth(Double.parseDouble(FIT_WIDTH));
-        analyzedImageView.setStyle("-fx-padding: 2px");
-        analyzedImageView.setStyle("-fx-background-color:white;");
-
-        ScrollPane copymoveDataScrollPane = new ScrollPane();
-        copymoveDataScrollPane.setFitToHeight(true);
-        copymoveDataScrollPane.setFitToWidth(true);
-        copymoveDataScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        copymoveDataScrollPane.setContent(analyzedImageView);
-
-        return copymoveDataScrollPane;
-    }
+		return tempScrollpane;
+	}
 
     private ScrollPane displaySignatureScrollPane() {
         GridPane signatureDataGridPane = new GridPane();
