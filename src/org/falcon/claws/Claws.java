@@ -15,7 +15,11 @@ public class Claws {
 	private static final String TAG = makeLogTag(Claws.class);
 
 	public static String analyse(String imagePathString) {
-		String cmdString = "claws -f " + imagePathString + " -o " + Config.ANALYSIS_DIR + " --ela --copymove 4 5 --json";
+		String cmdString = "claws -f " + imagePathString
+				+ " -o " + Config.ANALYSIS_DIR
+				+ " --ela "
+				+ "--copymove 4 5 "
+				+ "--json";
 
 		Process process;
 		//noinspection MismatchedQueryAndUpdateOfStringBuilder
