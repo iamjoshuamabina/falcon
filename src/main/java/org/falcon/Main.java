@@ -64,7 +64,7 @@ public class Main extends Application implements MapComponentInitializedListener
     private VBox imageForensicsIconVBox;
     private HBox imageForensicsLeftGridPaneItemHBox;
     private final Label leftGridPaneItemImageLabel = new Label("Image Forensics");
-    private final ImageView cameraIconImageView = new ImageView(new Image("icons/image.png"));
+    private final ImageView cameraIconImageView = new ImageView(new Image("org/falcon/icons/image.png"));
 
     private VBox imageDetailsVBox;
     private HBox analyzeButtonHBox;
@@ -78,7 +78,7 @@ public class Main extends Application implements MapComponentInitializedListener
     private final Label caseDescriptionLabel = new Label("Description");
     private final Label analyzeImageButtonLabel = new Label("Analyze Image");
     private final Label selectImageFileLabel = new Label("Select Image File");
-    private ImageView selectedImageFileImageView = new ImageView(new Image("images/thumb_400x300.png"));
+    private ImageView selectedImageFileImageView = new ImageView(new Image("org/falcon/images/thumb_400x300.png"));
 
     private GoogleMapView mGoogleMapView;
 	private double googleMapViewLatitude, googleMapViewLongitude;
@@ -1004,7 +1004,7 @@ public class Main extends Application implements MapComponentInitializedListener
         primaryStage.setMinHeight(DEFAULT_SCREEN_SIZE.getDisplayMode().getHeight());
 
         primaryStage.setMaximized(true);
-        mainContentScene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+        mainContentScene.getStylesheets().add(getClass().getResource("/org/falcon/css/app.css").toExternalForm());
         primaryStage.show();
     }
 
