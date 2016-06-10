@@ -26,7 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.falcon.claws.Claws;
+import org.falcon.util.RouteUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -38,6 +38,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
 
+import static org.falcon.util.IOUtils.MKDIR;
 import static org.falcon.util.LogUtils.*;
 
 @SuppressWarnings("ConstantConditions")
@@ -870,7 +871,7 @@ public class AppMain extends Application implements MapComponentInitializedListe
 			if (event.getButton() == MouseButton.PRIMARY) {
 
 				displaySplitPane(null);
-				analysisResultJsonString = Claws.analyse(imagePath);
+				analysisResultJsonString = "";
 
 				if (analysisResultJsonString.isEmpty()) {
 					LOGW(TAG, "No analysis report to show");
@@ -964,6 +965,9 @@ public class AppMain extends Application implements MapComponentInitializedListe
     @Override
     @SuppressWarnings("DesignForExtension")
     public void start(Stage primaryStage) throws IOException, URISyntaxException {
+
+		// On start, create root directory.
+		MKDIR(new File(RouteUtils.ROOT.toString()));
 
         imageForensicsLeftGridPaneItemHBox.setAlignment(Pos.CENTER);
         imageForensicsLeftGridPaneItemHBox.setMinWidth(250);

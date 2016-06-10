@@ -16,10 +16,13 @@ public class IOUtils
 	 * */
 	public static String PWD(String DIR)
 	{
-		String fileSeparator = System.getProperty("file.separator");
-		return getProperty("user.home")
-				+ fileSeparator + Config.USER_ROOT
-				+ fileSeparator + DIR;
+		String fileSeparator = getProperty("file.separator");
+		String userRoot = getProperty("user.home") + fileSeparator + Config.USER_ROOT ;
+
+		if(DIR.endsWith("/"))
+			return userRoot;
+
+		return userRoot + fileSeparator + DIR;
 	}
 
 	/**
@@ -60,7 +63,7 @@ public class IOUtils
 	}
 
 	/**
-	 * Make the directory(ies), if it(they) do not already exist.
+	 * Make the directory(ies), if not already made.
 	 *
 	 * @param DIRECTORY The name of directory.
 	 * */
