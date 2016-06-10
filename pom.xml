@@ -9,7 +9,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -78,7 +78,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>org.falcon.ui.Main</mainClass>
+							<mainClass>org.falcon.AppMain</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -92,7 +92,7 @@
 				<version>8.5.0</version>
 				<configuration>
 					<vendor>org.falcon</vendor>
-					<mainClass>org.falcon.ui.Main</mainClass>
+					<mainClass>org.falcon.AppMain</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -1,4 +1,4 @@
-package org.falcon.ui;
+package org.falcon;
 
 import com.lynden.gmapsfx.GoogleMapView;
 import com.lynden.gmapsfx.MapComponentInitializedListener;
@@ -41,9 +41,9 @@ import java.util.Iterator;
 import static org.falcon.util.LogUtils.*;
 
 @SuppressWarnings("ConstantConditions")
-public class Main extends Application implements MapComponentInitializedListener {
+public class AppMain extends Application implements MapComponentInitializedListener {
 
-	private static final String TAG = makeLogTag(Main.class);
+	private static final String TAG = makeLogTag(AppMain.class);
 
 	private long imageSize;
 	private String imageName, imagePath;
@@ -85,7 +85,7 @@ public class Main extends Application implements MapComponentInitializedListener
     private GoogleMapView mGoogleMapView;
 	private double googleMapViewLatitude, googleMapViewLongitude;
 
-    public Main() {
+    public AppMain() {
         mainSplitPane = new SplitPane();
         mainSplitPane.setOrientation(Orientation.VERTICAL);
         mainSplitPane.setPadding(new Insets(20, 0, 0, 0));

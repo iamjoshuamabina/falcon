@@ -2,10 +2,23 @@ package org.falcon.util;
 
 import java.io.*;
 
-public class FileUtils
+public class IOUtils
 {
 
-	public static void copy(String source, String destination)
+	public static void DEL(File f)
+	{
+		if (f.isDirectory()) {
+			for (File c : f.listFiles()) {
+				if (!c.delete())
+					System.out.println("[INFO] Failed to DEL " + c.getName());
+			}
+		}
+
+		if (!f.delete())
+			System.out.println("[ERROR] Failed to DEL " + f.getName());
+	}
+
+	public static void COPY(String source, String destination)
 	{
 		InputStream inputStream;
 		OutputStream outputStream;
@@ -22,23 +35,12 @@ public class FileUtils
 		}
 	}
 
-	public static void makeDirectory(File f) {
+	public static void MKDIR(File f)
+	{
 		if(!f.isDirectory()) {
 			if(!f.mkdir()) {
 				System.out.println("[INFO] Failed to make directory ");
 			}
 		}
-	}
-
-	public static void deleteDirectory(File f) {
-		if (f.isDirectory()) {
-			for (File c : f.listFiles()) {
-				if (!c.delete())
-					System.out.println("[INFO] Failed to delete " + c.getName());
-			}
-		}
-
-		if (!f.delete())
-			System.out.println("[ERROR] Failed to delete " + f.getName());
 	}
 }
