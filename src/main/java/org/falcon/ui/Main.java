@@ -1,4 +1,4 @@
-package org.falcon;
+package org.falcon.ui;
 
 import com.lynden.gmapsfx.GoogleMapView;
 import com.lynden.gmapsfx.MapComponentInitializedListener;

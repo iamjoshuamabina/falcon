@@ -78,7 +78,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>org.falcon.Main</mainClass>
+							<mainClass>org.falcon.ui.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -92,7 +92,7 @@
 				<version>8.5.0</version>
 				<configuration>
 					<vendor>org.falcon</vendor>
-					<mainClass>org.falcon.Main</mainClass>
+					<mainClass>org.falcon.ui.Main</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
