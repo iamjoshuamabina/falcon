@@ -1,44 +1,73 @@
 package org.falcon.util;
 
+import org.falcon.Config;
+
 import java.io.*;
+
+import static java.lang.System.getProperty;
 
 public class IOUtils
 {
-
-	public static void DEL(File f)
+	/**
+	 * Prints system independent directory path string.
+	 *
+	 * @param DIR The name of the directory.
+	 * @return Path relative to /home/chucknorris/Falcon.
+	 * */
+	public static String PWD(String DIR)
 	{
-		if (f.isDirectory()) {
-			for (File c : f.listFiles()) {
+		String fileSeparator = System.getProperty("file.separator");
+		return getProperty("user.home")
+				+ fileSeparator + Config.USER_ROOT
+				+ fileSeparator + DIR;
+	}
+
+	/**
+	 * Removes files or directories.
+	 *
+	 * @param FILE The file or directory to delete.
+	 * */
+	public static void DEL(File FILE)
+	{
+		if (FILE.isDirectory()) {
+			for (File c : FILE.listFiles()) {
 				if (!c.delete())
 					System.out.println("[INFO] Failed to DEL " + c.getName());
 			}
 		}
-
-		if (!f.delete())
-			System.out.println("[ERROR] Failed to DEL " + f.getName());
+		if (!FILE.delete())
+			System.out.println("[ERROR] Failed to DEL " + FILE.getName());
 	}
 
-	public static void COPY(String source, String destination)
+	/**
+	 * Copy files and directories.
+	 *
+	 * @param SOURCE The file or directory to copy from.
+	 * @param DEST The file or directory to copy to.
+	 * @throws IOException
+	 * */
+	public static void COPY(String SOURCE, String DEST) throws IOException
 	{
 		InputStream inputStream;
 		OutputStream outputStream;
-		try {
-			inputStream = new FileInputStream(source);
-			outputStream = new FileOutputStream(destination);
-			byte[] buffer = new byte[1024];
-			int length;
-			while ((length = inputStream.read(buffer)) > 0) {
-				outputStream.write(buffer, 0, length);
-			}
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
+		inputStream = new FileInputStream(SOURCE);
+		outputStream = new FileOutputStream(DEST);
+		byte[] buffer = new byte[1024];
+		int length;
+		while ((length = inputStream.read(buffer)) > 0) {
+			outputStream.write(buffer, 0, length);
 		}
 	}
 
-	public static void MKDIR(File f)
+	/**
+	 * Make the directory(ies), if it(they) do not already exist.
+	 *
+	 * @param DIRECTORY The name of directory.
+	 * */
+	public static void MKDIR(File DIRECTORY)
 	{
-		if(!f.isDirectory()) {
-			if(!f.mkdir()) {
+		if(!DIRECTORY.isDirectory()) {
+			if(!DIRECTORY.mkdir()) {
 				System.out.println("[INFO] Failed to make directory ");
 			}
 		}
