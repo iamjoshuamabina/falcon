@@ -87,13 +87,13 @@ MenuBar{
     -fx-background-color:white;
 }
 
-.tab .tab-label { 
+.tab .tab-label {
     -fx-alignment: CENTER;
     -fx-text-fill: #828282;
     -fx-font-size: 12px;
 }
 
-.tab:selected .tab-label { 
+.tab:selected .tab-label {
     -fx-alignment: CENTER;
     -fx-text-fill: #003333;
     -fx-font-weight:Bold;
@@ -129,8 +129,7 @@ split-pane *.split-pane-divider {
     -fx-background-color:whitesmoke;
 }
 #XMPGridPane{
-   -fx-border: 2px solid;
-   -fx-border-color:ghostwhite; 
-   -fx-background-color:white; 
+   -fx-border-color:ghostwhite;
+   -fx-background-color:white;
    -fx-padding: 2px;
 }

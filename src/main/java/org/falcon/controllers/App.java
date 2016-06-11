@@ -1,4 +1,4 @@
 package org.falcon.controllers;
 
-public class Controller {
+public class App {
 }

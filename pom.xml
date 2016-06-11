@@ -22,16 +22,6 @@
 			<artifactId>json</artifactId>
 			<version>20160212</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.6</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.6</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -78,7 +68,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>org.falcon.AppMain</mainClass>
+							<mainClass>org.falcon.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -92,7 +82,7 @@
 				<version>8.5.0</version>
 				<configuration>
 					<vendor>org.falcon</vendor>
-					<mainClass>org.falcon.AppMain</mainClass>
+					<mainClass>org.falcon.Main</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
