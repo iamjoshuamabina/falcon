@@ -73,10 +73,10 @@ public class IOUtils
 	 * */
 	public static void MKDIR(File DIRECTORY)
 	{
-		if(!DIRECTORY.isDirectory()) {
+		if(!DIRECTORY.exists()) {
 			if(!DIRECTORY.mkdir()) {
 				LOGE(TAG, "failed to make directory");
 			}
-		}
+		} LOGE(TAG, "cannot create directory " + DIRECTORY.getName() + ": directory exists");
 	}
 }
