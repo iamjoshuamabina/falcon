@@ -2,72 +2,90 @@ package org.falcon.util;
 
 import org.falcon.Config;
 
-public class LogUtils {
-	private static final String LOG_PREFIX = "falcon_";
+import java.util.Date;
 
-	public static String makeLogTag(Class cls) {
-		return LOG_PREFIX + cls.getSimpleName();
+public class LogUtils
+{
+
+	private static String setUp(LogLevel level)
+	{
+		if(level == LogLevel.DEFAULT)
+			return level.getColor();
+
+		return level.getColor() + new Date().toString()
+				+ "\n"  + level.getName() + ":";
 	}
 
-	private static String setUp(LoggerLevel loggerLevel) {
-		return ConsoleUtils.color(loggerLevel.getLoggerValue())
-				+ "_" + loggerLevel.getLoggerName() + ":\n";
+	private static void LOG(LogLevel level)
+	{
+		ConsoleUtils.out(LogUtils.setUp(level));
 	}
 
-    public static void LOGE(final String tag, String message) {
-		LOG(LoggerLevel.ERROR, message);
-	}
-
-	public static void LOGF(final String tag, String message) {
-		LOG(LoggerLevel.FINE, message);
-	}
-
-	public static void LOGW(final String tag, String message) {
-		LOG(LoggerLevel.WARNING, message);
-	}
-
-	public static void LOGI(final String tag, String message) {
-		LOG(LoggerLevel.INFO, message);
-	}
-
-	public static void LOGD(final String tag, String message) {
-		LOG(LoggerLevel.DEFAULT, message);
-	}
-
-	private static void LOG(LoggerLevel level, String message) {
+	private static void LOG(LogLevel level, String message)
+	{
 		if(Config.SNAPSHOT_RELEASE) {
 			ConsoleUtils.out(LogUtils.setUp(level) + message);
-			LogUtils.LOG(LoggerLevel.DEFAULT);
+			LogUtils.LOG(LogLevel.DEFAULT);
 		}
 	}
 
-	private static void LOG(LoggerLevel level) {
-		ConsoleUtils.out(LogUtils.setUp(level));
-    }
+	public static String makeLogTag(Class cls)
+	{
+		return cls.getName();
+	}
 
-	private static class LoggerLevel {
+	public static void LOGE(final String tag, String message)
+	{
+		LOG(LogLevel.ERROR, message);
+	}
 
-        private String mName;
-        private int mValue;
+	public static void LOGF(final String tag, String message)
+	{
+		LOG(LogLevel.FINE, message);
+	}
 
-        public static final LoggerLevel ERROR = new LoggerLevel("ERROR", 31);
-        public static final LoggerLevel FINE = new LoggerLevel("FINE", 32);
-        public static final LoggerLevel WARNING = new LoggerLevel("WARNING", 33);
-        public static final LoggerLevel INFO = new LoggerLevel("INFO", 34);
-        public static final LoggerLevel DEFAULT = new LoggerLevel("DEFAULT", 38);
+	public static void LOGW(final String tag, String message)
+	{
+		LOG(LogLevel.WARNING, message);
+	}
 
-        public LoggerLevel(String name, int value) {
-            this.mName = name;
-            this.mValue = value;
-        }
+	public static void LOGI(final String tag, String message)
+	{
+		LOG(LogLevel.INFO, message);
+	}
 
-        private int getLoggerValue() {
-            return this.mValue;
-        }
+	public static void LOGD(final String tag, String message)
+	{
+		LOG(LogLevel.DEFAULT, message);
+	}
 
-        private String getLoggerName() {
-            return this.mName;
-        }
+	private static class LogLevel
+	{
 
-    }
+		private String name;
+		private int value;
+
+		public static final LogLevel ERROR = new LogLevel("ERROR", 31);
+		public static final LogLevel FINE = new LogLevel("FINE", 32);
+		public static final LogLevel WARNING = new LogLevel("WARNING", 33);
+		public static final LogLevel INFO = new LogLevel("INFO", 34);
+		public static final LogLevel DEFAULT = new LogLevel("DEFAULT", 38);
+
+		public LogLevel(String name, int value)
+		{
+			this.name = name;
+			this.value = value;
+		}
+
+		public String getColor()
+		{
+			return ConsoleUtils.color(this.value);
+		}
+
+		public String getName()
+		{
+			return this.name;
+		}
+
+	}
 }
