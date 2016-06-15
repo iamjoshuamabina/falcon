@@ -5,9 +5,13 @@ import org.falcon.Config;
 import java.io.*;
 
 import static java.lang.System.getProperty;
+import static org.falcon.util.LogUtils.LOGE;
+import static org.falcon.util.LogUtils.makeLogTag;
 
 public class IOUtils
 {
+	private static String TAG = makeLogTag(IOUtils.class);
+
 	/**
 	 * Prints system independent directory path string.
 	 *
@@ -35,11 +39,11 @@ public class IOUtils
 		if (FILE.isDirectory()) {
 			for (File c : FILE.listFiles()) {
 				if (!c.delete())
-					System.out.println("[INFO] Failed to DEL " + c.getName());
+					LOGE(TAG, "failed to remove '" + c.getName() + "'");
 			}
 		}
 		if (!FILE.delete())
-			System.out.println("[ERROR] Failed to DEL " + FILE.getName());
+			LOGE(TAG, "failed to remove '" + FILE.getName() + "'");
 	}
 
 	/**
@@ -71,7 +75,7 @@ public class IOUtils
 	{
 		if(!DIRECTORY.isDirectory()) {
 			if(!DIRECTORY.mkdir()) {
-				System.out.println("[INFO] Failed to make directory ");
+				LOGE(TAG, "failed to make directory");
 			}
 		}
 	}
