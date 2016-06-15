@@ -13,7 +13,7 @@ public class LogUtils
 			return level.getColor();
 
 		return level.getColor() + new Date().toString()
-				+ "\n"  + level.getName() + ":";
+				+ "\n"  + level.getName() + ": ";
 	}
 
 	private static void LOG(LogLevel level)
